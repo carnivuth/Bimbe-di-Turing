@@ -159,11 +159,12 @@ public class Expansion {
         //get future state
         int x= action.getRowFrom();
         int y= action.getColumnFrom();
-        
-
         int toX= action.getRowTo();
         int toY= action.getColumnTo();
 
+        
+        result.getBoard()[toX][toY]=result.getPawn(x, y);
+        result.getBoard()[x][y]=Pawn.EMPTY;
         //check for rules integrity
 
         //return new state
