@@ -149,7 +149,38 @@ public class Expansion {
         return result;
     }
     private String createActionString(int x, int y){
-        return Integer.toString(x)+Integer.toString(y);
+        String row="";
+        switch(x){
+            case 0:
+                row="a";
+            break;
+            case 1:
+                row="b";
+            break;
+            case 2:
+                row="c";
+            break;
+            case 3:
+                row="d";
+            break;
+            case 4:
+                row="e";
+            break;
+            case 5:
+                row="f";
+            break;
+            case 6:
+                row="g";
+            break;
+            case 7:
+                row="h";
+            break;
+            case 8:
+                row="i";
+            break;
+            
+        }
+        return row+Integer.toString(y);
 
     }
     public StateTablut result(StateTablut state, Action action) {
