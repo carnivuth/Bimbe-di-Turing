@@ -70,6 +70,14 @@
             </classpath>
         </java>
     </target>
+        <target name="bimbe">
+        <java classname="it.unibo.ai.didattica.competition.tablut.AI.MyTablutClient" fork="true">
+            <classpath>
+                <pathelement location="lib/gson-2.2.2.jar"/>
+                <pathelement location="build"/>
+            </classpath>
+        </java>
+    </target>
 
     <target name="random-jar">
         <jar destfile="random.jar" filesetmanifest="mergewithoutmain">

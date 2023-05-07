@@ -1,3 +1,5 @@
+package it.unibo.ai.didattica.competition.tablut.AI;
+
 import java.io.IOException;
 import java.net.UnknownHostException;
 
@@ -5,6 +7,7 @@ import it.unibo.ai.didattica.competition.tablut.client.TablutClient;
 import it.unibo.ai.didattica.competition.tablut.client.TablutRandomClient;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
+import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
 public class MyTablutClient extends TablutClient {
@@ -36,8 +39,6 @@ public class MyTablutClient extends TablutClient {
     // Qui ci sono i metodi astratti di TablutClient
     @Override
     public void run() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'run'");
         MinMax minmax = new MinMax(4, this.getPlayer());
         try {
             this.declareName();
@@ -45,22 +46,30 @@ public class MyTablutClient extends TablutClient {
             e.printStackTrace();
         }
         if (this.getPlayer() == (State.Turn.WHITE)) {
-            clientRoutine(minmax, Turn.WHITE);
+            try {
+                clientRoutine(minmax, Turn.WHITE);
+            } catch (ClassNotFoundException | IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         } else {
-            clientRoutine(minmax, Turn.BLACK);
+            try {
+                clientRoutine(minmax, Turn.BLACK);
+            } catch (ClassNotFoundException | IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
 
     }
 
     private void clientRoutine(MinMax minmax, Turn myTurn) throws ClassNotFoundException, IOException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'clientRoutine'");
         Action action;
         while (true) {
             this.read();
             if (this.getCurrentState().getTurn().equals(myTurn)) {
 
-                action = minmax.minmaxDecision(this.getCurrentState());
+                action = minmax.minmaxDecision((StateTablut) this.getCurrentState());
                 this.write(action);
             } else {
                 System.out.println("Waiting for the opponent move...");
@@ -78,10 +87,10 @@ public class MyTablutClient extends TablutClient {
         }
         String role = args[0];
         if (role.equals("WHITE")) {
-            TablutClient client = new TablutRandomClient(role, "Random", 60, "localhost");
+            TablutClient client = new MyTablutClient("WHITE", "Bimbe", 60, "localhost");
             client.run();
         } else if (role.equals("BLACK")) {
-            TablutClient client = new TablutRandomClient(role, "Random", 60, "localhost");
+            TablutClient client = new MyTablutClient("NERO", "Bimbe", 60, "localhost");
             client.run();
         } else {
             System.out.println("Allowed roles are only WHITE and BLACK!");
