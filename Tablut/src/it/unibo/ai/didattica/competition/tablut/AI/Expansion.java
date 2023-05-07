@@ -10,7 +10,7 @@ import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
 
-public class TablutActions {
+public class Expansion {
 
     public Set<Action> actions(StateTablut state) {
         Set<Action> result=new HashSet<>();
@@ -151,6 +151,23 @@ public class TablutActions {
     private String createActionString(int x, int y){
         return Integer.toString(x)+Integer.toString(y);
 
+    }
+    public StateTablut result(StateTablut state, Action action) {
+        //TODO
+        //clone state
+        StateTablut result=state.clone();
+        //get future state
+        int x= action.getRowFrom();
+        int y= action.getColumnFrom();
+        
+
+        int toX= action.getRowTo();
+        int toY= action.getColumnTo();
+
+        //check for rules integrity
+
+        //return new state
+        return result;
     }
     
 }
