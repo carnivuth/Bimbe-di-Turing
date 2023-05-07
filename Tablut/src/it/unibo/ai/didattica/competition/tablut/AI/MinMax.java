@@ -49,6 +49,8 @@ public class MinMax {
                 resultAction = a;
             }
         }
+        System.out.println("Best value: " + bestValue);
+        System.out.println("Result action: " + resultAction);
         return resultAction;
     }
 
