@@ -1,10 +1,11 @@
-package ai;
-import aima.core.search.framework.problem.ResultFunction;
-import aima.core.agent.Action;
+package  it.unibo.ai.didattica.competition.tablut.AI;
 
-public class TablutResultFunction implements  ResultFunction{
-    @Override
-    public Object result(Object s, Action a) {
+import it.unibo.ai.didattica.competition.tablut.domain.Action;
+import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
+
+public class TablutResultFunction {
+    
+    public StateTablut result(StateTablut s, Action a) {
         //TODO
         return null;
     }
