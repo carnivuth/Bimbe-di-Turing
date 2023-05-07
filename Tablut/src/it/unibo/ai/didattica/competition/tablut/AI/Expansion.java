@@ -150,37 +150,38 @@ public class Expansion {
     }
     private String createActionString(int x, int y){
         String row="";
-        switch(x){
-            case 0:
+
+        switch(x+1){
+            case 1:
                 row="a";
             break;
-            case 1:
+            case 2:
                 row="b";
             break;
-            case 2:
+            case 3:
                 row="c";
             break;
-            case 3:
+            case 4
                 row="d";
             break;
-            case 4:
+            case 5:
                 row="e";
             break;
-            case 5:
+            case 6:
                 row="f";
             break;
-            case 6:
+            case 7:
                 row="g";
             break;
-            case 7:
+            case 8:
                 row="h";
             break;
-            case 8:
+            case 9:
                 row="i";
             break;
             
         }
-        return row+Integer.toString(y);
+        return row+Integer.toString(y+1);
 
     }
     public StateTablut result(StateTablut state, Action action) {
