@@ -149,39 +149,39 @@ public class Expansion {
         return result;
     }
     private String createActionString(int x, int y){
-        String row="";
+        String column="";
 
-        switch(x+1){
+        switch(y+1){
             case 1:
-                row="a";
+            column="a";
             break;
             case 2:
-                row="b";
+            column="b";
             break;
             case 3:
-                row="c";
+            column="c";
             break;
             case 4:
-                row="d";
+            column="d";
             break;
             case 5:
-                row="e";
+            column="e";
             break;
             case 6:
-                row="f";
+            column="f";
             break;
             case 7:
-                row="g";
+            column="g";
             break;
             case 8:
-                row="h";
+            column="h";
             break;
             case 9:
-                row="i";
+            column="i";
             break;
             
         }
-        return Integer.toString(y+1)+row;
+        return column+Integer.toString(x+1);
 
     }
     public StateTablut result(StateTablut state, Action action) {
