@@ -1,118 +1,156 @@
-package ai;
+package  it.unibo.ai.didattica.competition.tablut.AI;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import ai.state.GameState;
-import ai.state.Pawn;
-import ai.state.TablutAction;
-import aima.core.agent.Action;
-import aima.core.search.framework.problem.ActionsFunction;
+import it.unibo.ai.didattica.competition.tablut.domain.Action;
+import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
+import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
+import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
-public class TablutActions implements ActionsFunction {
 
-    @Override
-    public Set<Action> actions(Object s) {
+public class TablutActions {
+
+    public Set<Action> actions(StateTablut state) {
         Set<Action> result=new HashSet<>();
-        if(s instanceof GameState){
-            
-            GameState state = (GameState)s;
+     
             //get moves
-            if(state.color==GameState.WHITE){
-                for (int i=0;i<state.whitePawns.length;i++) {
-                    result.addAll(getPossibleMovements(state.whitePawns[i], state));
+            if(state.getTurn().equals(Turn.WHITE)){
+                for (int i=0;i<state.getBoard().length;i++) {
+                    for (int j=0;j<state.getBoard().length;j++) {
+                        if(state.getPawn(i, j).equals(Pawn.WHITE)){
+                     
+                            result.addAll(getPossibleMovements(state.getPawn(i, j),i,j, state));
+                        }
+                        if(state.getPawn(i, j).equals(Pawn.KING)){
+                     
+                            result.addAll(getPossibleMovements(state.getPawn(i, j),i,j, state));
+                        }
+                    }
                 }
-                result.addAll(getPossibleMovements(state.king, state));
             }else{
-                for (int i=0;i<state.blackPawns.length;i++) {
-                    result.addAll(getPossibleMovements(state.blackPawns[i], state));           
+                for (int i=0;i<state.getBoard().length;i++) {
+                    for (int j=0;j<state.getBoard().length;j++) {
+                        if(state.getPawn(i, j).equals(Pawn.BLACK)){
+                     
+                            result.addAll(getPossibleMovements(state.getPawn(i, j),i,j, state));
+                        }
+                    
+                    }
                 }
             }
-        }
+        
 
         return result;
     }
-    public Set<Action> getPossibleMovements(Pawn pawn, GameState state){
+    public Set<Action> getPossibleMovements(Pawn pawn,int x,int y, StateTablut state){
         Set<Action> result=new HashSet<>();
-        int newColumn=pawn.y-1;
+        int newColumn=y-1;
 
         //move pawn to top
         while(newColumn>=0){
             //check if throne
-            if(pawn.x==GameState.throne[0] && newColumn==GameState.throne[1]){
+            if(state.getPawn(x, newColumn).equals(Pawn.THRONE)){
                 break;
             }
             //check for citadel cells 
-            if(GameState.isIn(pawn, GameState.safeCitadels)&& (pawn.type==GameState.WHITE || !GameState.isIn(pawn,GameState.citadels))){
-                break;
-            }
+           // if(GameState.isIn(pawn, GameState.safeCitadels)&& (pawn.type==GameState.WHITE || !GameState.isIn(pawn,GameState.citadels))){
+           //     break;
+           // }
             //check for not free cells
-            if (state.getState(pawn.x,newColumn)!=GameState.FREE){
+            if (!state.getPawn(x, newColumn).equals(Pawn.EMPTY)){
                 break;
             }
-            result.add(new TablutAction(pawn, new int[]{pawn.x,newColumn}));
+            try {
+                result.add(new Action(createActionString(x, y),createActionString(x, newColumn),state.getTurn() ));
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
             newColumn-=1;
         }
 
         //move pawn to bottom
-        newColumn=pawn.y+1;
+        newColumn=y+1;
         while(newColumn<9){
             //check if throne
-            if(pawn.x==GameState.throne[0] && newColumn==GameState.throne[1]){
+            if(state.getPawn(x, newColumn).equals(Pawn.THRONE)){
                 break;
             }
             //check for citadel cells 
-            if(GameState.isIn(pawn, GameState.safeCitadels)&& (pawn.type==GameState.WHITE || !GameState.isIn(pawn,GameState.citadels))){
+            /*if(GameState.isIn(pawn, GameState.safeCitadels)&& (pawn.type==GameState.WHITE || !GameState.isIn(pawn,GameState.citadels))){
                 break;
-            }
+            }*/
             //check for not free cells
-            if (state.getState(pawn.x,newColumn)!=GameState.FREE){
+            if (!state.getPawn(x, newColumn).equals(Pawn.EMPTY)){
                 break;
             }
-            result.add(new TablutAction(pawn, new int[]{pawn.x,newColumn}));
+            try {
+                result.add(new Action(createActionString(x, y),createActionString(x, newColumn),state.getTurn() ));
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             newColumn+=1;
         }
 
          //move pawn to right
-         int newRaw=pawn.x-1;
+         int newRaw=x-1;
          while(newRaw>=0){
             //check if throne
-            if(pawn.y==GameState.throne[1] && newRaw==GameState.throne[0]){
+            if(state.getPawn(newRaw, y).equals(Pawn.THRONE)){
                 break;
             }
             //check for citadel cells 
-            if(GameState.isIn(pawn, GameState.safeCitadels)&& (pawn.type==GameState.WHITE || !GameState.isIn(pawn,GameState.citadels))){
+            /*if(GameState.isIn(pawn, GameState.safeCitadels)&& (pawn.type==GameState.WHITE || !GameState.isIn(pawn,GameState.citadels))){
                 break;
-            }
+            }*/
             //check for not free cells
-            if (state.getState(newRaw,pawn.y)!=GameState.FREE){
+            if (!state.getPawn(newRaw, y).equals(Pawn.EMPTY)){
                 break;
             }
-            result.add(new TablutAction(pawn, new int[]{newRaw,pawn.y}));
+            try {
+                result.add(new Action(createActionString(x, y),createActionString(newRaw, y),state.getTurn() ));
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
             newRaw-=1;
         }
 
         //move pown to left
-        newRaw=pawn.x+1;
+        newRaw=x+1;
         while(newRaw<9){
 
             //check if throne
-            if(pawn.y==GameState.throne[1] && newRaw==GameState.throne[0]){
+            if(state.getPawn(newRaw, y).equals(Pawn.THRONE)){
                 break;
             }
             //check for citadel cells 
-            if(GameState.isIn(pawn, GameState.safeCitadels)&& (pawn.type==GameState.WHITE || !GameState.isIn(pawn,GameState.citadels))){
+            /*if(GameState.isIn(pawn, GameState.safeCitadels)&& (pawn.type==GameState.WHITE || !GameState.isIn(pawn,GameState.citadels))){
                 break;
-            }
+            }*/
             //check for not free cells
-            if (state.getState(newRaw,pawn.y)!=GameState.FREE){
+            if (!state.getPawn(newRaw, y).equals(Pawn.EMPTY)){
                 break;
             }
-            result.add(new TablutAction(pawn, new int[]{newRaw,pawn.y}));
+            try {
+                result.add(new Action(createActionString(x, y),createActionString(newRaw, y),state.getTurn() ));
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             newRaw+=1;
         }
 
         return result;
+    }
+    private String createActionString(int x, int y){
+        return Integer.toString(x)+Integer.toString(y);
+
     }
     
 }
