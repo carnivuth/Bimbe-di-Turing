@@ -71,6 +71,9 @@ public abstract class State {
 		public boolean equalsPawn(String otherPawn) {
 			return (otherPawn == null) ? false : pawn.equals(otherPawn);
 		}
+		public boolean equalsPawn(Pawn otherPawn) {
+			return (otherPawn == null) ? false : pawn.equals(otherPawn.toString());
+		}
 
 		public String toString() {
 			return pawn;
