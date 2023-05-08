@@ -20,10 +20,9 @@ public class Expansion {
             //get moves
             if(color.equals("WHITE")){
                 for (int[] coordinates : whitePawns) {
-                    System.out.println(state.getPawn(coordinates[0],coordinates[1] ).toString());
-                    result.addAll(getPossibleMovements(state.getPawn(coordinates[0],coordinates[1] ),coordinates[0],coordinates[1], state));
+                    result.addAll(getPossibleMovements(state.getPawn(coordinates[0],coordinates[1] ),coordinates[0],coordinates[1], state,color));
                 }
-                result.addAll(getPossibleMovements(state.getPawn(king[0],king[1] ),king[0],king[1], state));
+                result.addAll(getPossibleMovements(state.getPawn(king[0],king[1] ),king[0],king[1], state,color));
 
 
                 /*for (int i=0;i<state.getBoard().length;i++) {
@@ -40,8 +39,7 @@ public class Expansion {
                 }*/
             }else{
                 for (int[] coordinates : blackPawns) {
-                    System.out.println(state.getPawn(coordinates[0],coordinates[1]).toString() );
-                    result.addAll(getPossibleMovements(state.getPawn(coordinates[0],coordinates[1] ),coordinates[0],coordinates[1], state));
+                    result.addAll(getPossibleMovements(state.getPawn(coordinates[0],coordinates[1] ),coordinates[0],coordinates[1], state,color));
                 }
                 /*for (int i=0;i<state.getBoard().length;i++) {
                     for (int j=0;j<state.getBoard().length;j++) {
@@ -57,7 +55,7 @@ public class Expansion {
 
         return result;
     }
-    public Set<Action> getPossibleMovements(Pawn pawn,int x,int y, StateTablut state){
+    public Set<Action> getPossibleMovements(Pawn pawn,int x,int y, StateTablut state,String color){
         Set<Action> result=new HashSet<>();
         int newColumn=y-1;
 
@@ -68,8 +66,11 @@ public class Expansion {
                 break;
             }
             //check for citadel cells 
-           if(StateUtils.isIn(x, newColumn, StateUtils.safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !StateUtils.isIn(x,newColumn,StateUtils.citadels))){
+           if(StateUtils.isIn(x, newColumn, StateUtils.citadels)&& color.equals("WHITE")){
             break;
+            }
+            if(StateUtils.isIn(x, newColumn, StateUtils.citadels)&& color.equals("BLACK") && !StateUtils.isIn(x, y,StateUtils.citadels)){
+                break;
             }
 
             //check for not free cells
@@ -94,7 +95,10 @@ public class Expansion {
                 break;
             }
             //check for citadel cells 
-            if(StateUtils.isIn(x, newColumn, StateUtils.safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !StateUtils.isIn(x,newColumn,StateUtils.citadels))){
+            if(StateUtils.isIn(x, newColumn, StateUtils.citadels)&& color.equals("WHITE")){
+                break;
+            }
+             if(StateUtils.isIn(x, newColumn, StateUtils.citadels)&& color.equals("BLACK") && !StateUtils.isIn(x, y,StateUtils.citadels)){
                 break;
             }
 
@@ -119,7 +123,10 @@ public class Expansion {
                 break;
             }
             //check for citadel cells 
-            if(StateUtils.isIn(newRaw, y, StateUtils.safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !StateUtils.isIn(newRaw,y,StateUtils.citadels))){
+            if(StateUtils.isIn(newRaw, y, StateUtils.citadels)&& color.equals("WHITE")){
+                break;
+            }
+            if(StateUtils.isIn(newRaw, y, StateUtils.citadels)&& color.equals("BLACK") && !StateUtils.isIn(x, y,StateUtils.citadels)){
                 break;
             }
 
@@ -147,7 +154,10 @@ public class Expansion {
             }
 
             //check for citadel cells 
-            if(StateUtils.isIn(newRaw, y, StateUtils.safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !StateUtils.isIn(newRaw,y,StateUtils.citadels))){
+            if(StateUtils.isIn(newRaw, y, StateUtils.citadels)&& color.equals("WHITE")){
+                break;
+            }
+            if(StateUtils.isIn(newRaw, y, StateUtils.citadels)&& color.equals("BLACK") && !StateUtils.isIn(x, y,StateUtils.citadels)){
                 break;
             }
             
