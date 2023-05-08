@@ -7,7 +7,7 @@ import it.unibo.ai.didattica.competition.tablut.domain.State;
 
 public class StateUtils {
 
-    public static final int[][] citadels = { { 0, 3 }, { 0, 4 }, { 0, 4 }, { 1, 4 },
+    public static final int[][] citadels = { { 0, 3 }, { 0, 4 }, { 0, 5 }, { 1, 4 },
             { 8, 3 }, { 8, 4 }, { 8, 5 }, { 7, 4 },
             { 3, 8 }, { 4, 8 }, { 5, 8 }, { 4, 7 },
             { 3, 0 }, { 4, 0 }, { 5, 0 }, { 4, 1 } };
