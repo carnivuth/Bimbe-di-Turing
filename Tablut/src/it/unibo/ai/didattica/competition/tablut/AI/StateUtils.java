@@ -47,7 +47,7 @@ public class StateUtils {
         int[] result=new int[2];
         for (int i=0;i<state.getBoard().length;i++) {
             for (int j=0;j<state.getBoard().length;j++) {
-                if(state.getPawn(i, j).equalsPawn("KING")){
+                if(state.getPawn(i, j).equalsPawn("K")){
                     
                     result[0]=i;
                     result[1]=j;
@@ -92,6 +92,14 @@ public class StateUtils {
         }
         return column+Integer.toString(x+1);
 
+    }
+    public static String printPawns (List<int[]> pawns){
+        String result="";
+        for (int[] pawn : pawns) {
+            result+=Integer.toString(pawn[0])+Integer.toString(pawn[1])+"\n";
+            
+        }
+        return result;
     }
 
 
