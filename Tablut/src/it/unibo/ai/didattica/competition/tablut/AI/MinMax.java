@@ -39,9 +39,10 @@ public class MinMax {
         double alpha = Double.NEGATIVE_INFINITY;
         double beta = Double.POSITIVE_INFINITY;
 
-        possibleActions = myExpansion.actions(currentState);
+        possibleActions = myExpansion.actions(currentState,myExpansion.getPawns(currentState, "BLACK"),myExpansion.getKing(currentState),myExpansion.getPawns(currentState,"WHITE"));
 
         for (Action a : possibleActions) {
+            System.out.println(a.toString());
             StateTablut newState = myExpansion.result(currentState, a);
             double value = minValue(newState, alpha, beta, 0);
             if (value > bestValue) {
@@ -59,7 +60,7 @@ public class MinMax {
             return evaluate(state);
         }
         double value = Double.NEGATIVE_INFINITY;
-        for (Action a : myExpansion.actions(state)) {
+        for (Action a : myExpansion.actions(state,myExpansion.getPawns(state, "BLACK"),myExpansion.getKing(state),myExpansion.getPawns(state,"WHITE"))) {
             StateTablut newState = myExpansion.result(state, a);
             value = Math.max(value, minValue(newState, alpha, beta, depth + 1));
             if (value >= beta) {
@@ -75,7 +76,7 @@ public class MinMax {
             return evaluate(state);
         }
         double value = Double.POSITIVE_INFINITY;
-        for (Action a : myExpansion.actions(state)) {
+        for (Action a : myExpansion.actions(state,myExpansion.getPawns(state, "BLACK"),myExpansion.getKing(state),myExpansion.getPawns(state,"WHITE"))) {
             StateTablut newState = myExpansion.result(state, a);
             value = Math.min(value, maxValue(newState, alpha, beta, depth + 1));
             if (value <= alpha) {

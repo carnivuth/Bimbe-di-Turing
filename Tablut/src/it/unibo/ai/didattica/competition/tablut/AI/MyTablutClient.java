@@ -79,12 +79,15 @@ public class MyTablutClient extends TablutClient {
 
     // il main
     public static void main(String[] args) throws UnknownHostException, ClassNotFoundException, IOException {
-
+        String role;
         if (args.length == 0) {
-            System.out.println("You must specify which player you are (WHITE or BLACK)!");
-            System.exit(-1);
+           // System.out.println("You must specify which player you are (WHITE or BLACK)!");
+           // System.exit(-1);
+           role="WHITE";
+        }else{
+         role = args[0];
+
         }
-        String role = args[0];
         if (role.equals("WHITE")) {
             TablutClient client = new MyTablutClient("WHITE", "Bimbe", 60, "localhost");
             client.run();

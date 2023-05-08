@@ -1,10 +1,13 @@
 package  it.unibo.ai.didattica.competition.tablut.AI;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
+import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
@@ -22,12 +25,19 @@ public class Expansion {
                                             {3,8},{4,8},{5,8},
                                             {3,0},{4,0},{5,0}};
 
-    public Set<Action> actions(StateTablut state) {
+    public Set<Action> actions(StateTablut state,List<int []> blackPawns,int[] king,List<int []> whitePawns ) {
         Set<Action> result=new HashSet<>();
      
             //get moves
             if(state.getTurn().equals(Turn.WHITE)){
-                for (int i=0;i<state.getBoard().length;i++) {
+                for (int[] coordinates : whitePawns) {
+                    System.out.println(state.getPawn(coordinates[0],coordinates[1] ));
+                    result.addAll(getPossibleMovements(state.getPawn(coordinates[0],coordinates[1] ),coordinates[0],coordinates[1], state));
+                }
+                result.addAll(getPossibleMovements(state.getPawn(king[0],king[1] ),king[0],king[1], state));
+
+
+                /*for (int i=0;i<state.getBoard().length;i++) {
                     for (int j=0;j<state.getBoard().length;j++) {
                         if(state.getPawn(i, j).equals(Pawn.WHITE)){
                      
@@ -38,9 +48,12 @@ public class Expansion {
                             result.addAll(getPossibleMovements(state.getPawn(i, j),i,j, state));
                         }
                     }
-                }
+                }*/
             }else{
-                for (int i=0;i<state.getBoard().length;i++) {
+                for (int[] coordinates : blackPawns) {
+                    result.addAll(getPossibleMovements(state.getPawn(coordinates[0],coordinates[1] ),coordinates[0],coordinates[1], state));
+                }
+                /*for (int i=0;i<state.getBoard().length;i++) {
                     for (int j=0;j<state.getBoard().length;j++) {
                         if(state.getPawn(i, j).equals(Pawn.BLACK)){
                      
@@ -48,7 +61,7 @@ public class Expansion {
                         }
                     
                     }
-                }
+                }*/
             }
         
 
@@ -119,7 +132,7 @@ public class Expansion {
             if(isIn(newRaw, y, safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !isIn(newRaw,y,citadels))){
                 break;
             }
-            
+
             //check for not free cells
             if (!state.getPawn(newRaw, y).equals(Pawn.EMPTY)){
                 break;
@@ -224,6 +237,38 @@ public class Expansion {
         }
         return false;
 
+    }
+    public List<int[]> getPawns(State state, String color){
+
+        List<int[]> result=new ArrayList<>();
+        for (int i=0;i<state.getBoard().length;i++) {
+            for (int j=0;j<state.getBoard().length;j++) {
+                if(state.getPawn(i, j).equalsPawn(color)){
+                    
+                    int[] coordinates =new int[2];
+                    coordinates[0]=i;
+                    coordinates[1]=j;
+                    result.add(coordinates);
+                }
+             
+            }
+        }
+        return result;
+    }
+    public int[] getKing(State state){
+
+        int[] result=new int[2];
+        for (int i=0;i<state.getBoard().length;i++) {
+            for (int j=0;j<state.getBoard().length;j++) {
+                if(state.getPawn(i, j).equalsPawn("KING")){
+                    
+                    result[0]=i;
+                    result[1]=j;
+                }
+             
+            }
+        }
+        return result;
     }
     
 }
