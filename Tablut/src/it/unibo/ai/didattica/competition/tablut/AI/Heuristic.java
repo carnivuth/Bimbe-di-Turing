@@ -23,7 +23,7 @@ public class Heuristic {
         this.weights[10] = 1;
     }
 
-    public double evaluationFn(StateTablut state) {
+    public double evaluate(StateTablut state) {
 
         // get white and black pawns
         int w = state.getNumberOf(StateTablut.Pawn.WHITE);

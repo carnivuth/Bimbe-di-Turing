@@ -20,7 +20,7 @@ public class StateUtils {
     public static final int[][] escapes = {{0,1},{0,2},{0,6},{0,7}, 
                         {8,1},{8,2},{8,6},{8,7},
                         {1,0},{2,0},{6,0},{7,0},
-                        {1,8},{2,8},{6,8},{7,8}}
+                        {1,8},{2,8},{6,8},{7,8}};
 
     public static final int[] castle = { 4, 4 };
 

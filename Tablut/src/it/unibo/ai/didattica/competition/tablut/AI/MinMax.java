@@ -99,7 +99,7 @@ public class MinMax {
 
     private double evaluate(StateTablut state) {
 
-        return heuristic.evaluate(state, 0);
+        return heuristic.evaluate(state);
     }
 
 }
