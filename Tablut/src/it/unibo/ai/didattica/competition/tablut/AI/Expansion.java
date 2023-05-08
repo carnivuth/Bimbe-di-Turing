@@ -12,6 +12,16 @@ import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
 public class Expansion {
 
+    public static final int [][] citadels ={{0,3},{0,4},{0,4},{1,4},
+                                            {8,3},{8,4},{8,5},{7,4},
+                                            {3,8},{4,8},{5,8},{4,7},
+                                            {3,0},{4,0},{5,0},{4,1}};
+    
+    public static final int [][] safeCitadels ={{0,3},{0,4},{0,4},
+                                            {8,3},{8,4},{8,5},
+                                            {3,8},{4,8},{5,8},
+                                            {3,0},{4,0},{5,0}};
+
     public Set<Action> actions(StateTablut state) {
         Set<Action> result=new HashSet<>();
      
@@ -55,9 +65,10 @@ public class Expansion {
                 break;
             }
             //check for citadel cells 
-           // if(GameState.isIn(pawn, GameState.safeCitadels)&& (pawn.type==GameState.WHITE || !GameState.isIn(pawn,GameState.citadels))){
-           //     break;
-           // }
+           if(isIn(x, newColumn, safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !isIn(x,newColumn,citadels))){
+            break;
+            }
+
             //check for not free cells
             if (!state.getPawn(x, newColumn).equals(Pawn.EMPTY)){
                 break;
@@ -80,9 +91,10 @@ public class Expansion {
                 break;
             }
             //check for citadel cells 
-            /*if(GameState.isIn(pawn, GameState.safeCitadels)&& (pawn.type==GameState.WHITE || !GameState.isIn(pawn,GameState.citadels))){
+            if(isIn(x, newColumn, safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !isIn(x,newColumn,citadels))){
                 break;
-            }*/
+            }
+
             //check for not free cells
             if (!state.getPawn(x, newColumn).equals(Pawn.EMPTY)){
                 break;
@@ -104,9 +116,10 @@ public class Expansion {
                 break;
             }
             //check for citadel cells 
-            /*if(GameState.isIn(pawn, GameState.safeCitadels)&& (pawn.type==GameState.WHITE || !GameState.isIn(pawn,GameState.citadels))){
+            if(isIn(newRaw, y, safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !isIn(newRaw,y,citadels))){
                 break;
-            }*/
+            }
+            
             //check for not free cells
             if (!state.getPawn(newRaw, y).equals(Pawn.EMPTY)){
                 break;
@@ -129,10 +142,12 @@ public class Expansion {
             if(state.getPawn(newRaw, y).equals(Pawn.THRONE)){
                 break;
             }
+
             //check for citadel cells 
-            /*if(GameState.isIn(pawn, GameState.safeCitadels)&& (pawn.type==GameState.WHITE || !GameState.isIn(pawn,GameState.citadels))){
+            if(isIn(newRaw, y, safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !isIn(newRaw,y,citadels))){
                 break;
-            }*/
+            }
+            
             //check for not free cells
             if (!state.getPawn(newRaw, y).equals(Pawn.EMPTY)){
                 break;
@@ -201,6 +216,14 @@ public class Expansion {
 
         //return new state
         return result;
+    }
+
+    public static boolean isIn(int x,int y, int[][] elements){
+        for(int i=0;i<elements.length;i++){
+            if(x==elements[i][0] &&y==elements[i][1])return true;
+        }
+        return false;
+
     }
     
 }
