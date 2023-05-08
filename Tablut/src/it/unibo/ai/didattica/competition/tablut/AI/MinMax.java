@@ -40,12 +40,12 @@ public class MinMax {
         double bestValue = Double.NEGATIVE_INFINITY;
         double alpha = Double.NEGATIVE_INFINITY;
         double beta = Double.POSITIVE_INFINITY;
-        
+        System.out.println(currentState.toString());
 
         possibleActions = myExpansion.actions(currentState,StateUtils.getPawns(currentState, "B"),StateUtils.getKing(currentState),StateUtils.getPawns(currentState,"W"),player.name());
 
         for (Action a : possibleActions) {
-            System.out.println(a.toString());
+            
             StateTablut newState = myExpansion.result(currentState, a);
             double value = minValue(newState, alpha, beta, 0);
             if (value > bestValue) {
@@ -53,6 +53,10 @@ public class MinMax {
                 resultAction = a;
             }
         }
+        System.out.println("PAWNS LISTS");
+        System.out.println(StateUtils.printPawns(StateUtils.getPawns(currentState, "W")));
+        System.out.println(StateUtils.printPawns(StateUtils.getPawns(currentState, "B")));
+        System.out.println(currentState.boardString());
         System.out.println("Best value: " + bestValue);
         System.out.println("Result action: " + resultAction);
         return resultAction;
