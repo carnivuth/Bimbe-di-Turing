@@ -1,37 +1,26 @@
 package  it.unibo.ai.didattica.competition.tablut.AI;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
-import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
-import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
 
 public class Expansion {
 
-    public static final int [][] citadels ={{0,3},{0,4},{0,4},{1,4},
-                                            {8,3},{8,4},{8,5},{7,4},
-                                            {3,8},{4,8},{5,8},{4,7},
-                                            {3,0},{4,0},{5,0},{4,1}};
     
-    public static final int [][] safeCitadels ={{0,3},{0,4},{0,4},
-                                            {8,3},{8,4},{8,5},
-                                            {3,8},{4,8},{5,8},
-                                            {3,0},{4,0},{5,0}};
 
-    public Set<Action> actions(StateTablut state,List<int []> blackPawns,int[] king,List<int []> whitePawns ) {
+    public Set<Action> actions(StateTablut state,List<int []> blackPawns,int[] king,List<int []> whitePawns,String color) {
         Set<Action> result=new HashSet<>();
      
             //get moves
-            if(state.getTurn().equals(Turn.WHITE)){
+            if(color.equals("WHITE")){
                 for (int[] coordinates : whitePawns) {
-                    System.out.println(state.getPawn(coordinates[0],coordinates[1] ));
+                    System.out.println(state.getPawn(coordinates[0],coordinates[1] ).toString());
                     result.addAll(getPossibleMovements(state.getPawn(coordinates[0],coordinates[1] ),coordinates[0],coordinates[1], state));
                 }
                 result.addAll(getPossibleMovements(state.getPawn(king[0],king[1] ),king[0],king[1], state));
@@ -51,6 +40,7 @@ public class Expansion {
                 }*/
             }else{
                 for (int[] coordinates : blackPawns) {
+                    System.out.println(state.getPawn(coordinates[0],coordinates[1]).toString() );
                     result.addAll(getPossibleMovements(state.getPawn(coordinates[0],coordinates[1] ),coordinates[0],coordinates[1], state));
                 }
                 /*for (int i=0;i<state.getBoard().length;i++) {
@@ -78,7 +68,7 @@ public class Expansion {
                 break;
             }
             //check for citadel cells 
-           if(isIn(x, newColumn, safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !isIn(x,newColumn,citadels))){
+           if(StateUtils.isIn(x, newColumn, StateUtils.safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !StateUtils.isIn(x,newColumn,StateUtils.citadels))){
             break;
             }
 
@@ -87,7 +77,7 @@ public class Expansion {
                 break;
             }
             try {
-                result.add(new Action(createActionString(x, y),createActionString(x, newColumn),state.getTurn() ));
+                result.add(new Action(StateUtils.createActionString(x, y),StateUtils.createActionString(x, newColumn),state.getTurn() ));
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -104,7 +94,7 @@ public class Expansion {
                 break;
             }
             //check for citadel cells 
-            if(isIn(x, newColumn, safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !isIn(x,newColumn,citadels))){
+            if(StateUtils.isIn(x, newColumn, StateUtils.safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !StateUtils.isIn(x,newColumn,StateUtils.citadels))){
                 break;
             }
 
@@ -113,7 +103,7 @@ public class Expansion {
                 break;
             }
             try {
-                result.add(new Action(createActionString(x, y),createActionString(x, newColumn),state.getTurn() ));
+                result.add(new Action(StateUtils.createActionString(x, y),StateUtils.createActionString(x, newColumn),state.getTurn() ));
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -129,7 +119,7 @@ public class Expansion {
                 break;
             }
             //check for citadel cells 
-            if(isIn(newRaw, y, safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !isIn(newRaw,y,citadels))){
+            if(StateUtils.isIn(newRaw, y, StateUtils.safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !StateUtils.isIn(newRaw,y,StateUtils.citadels))){
                 break;
             }
 
@@ -138,7 +128,7 @@ public class Expansion {
                 break;
             }
             try {
-                result.add(new Action(createActionString(x, y),createActionString(newRaw, y),state.getTurn() ));
+                result.add(new Action(StateUtils.createActionString(x, y),StateUtils.createActionString(newRaw, y),state.getTurn() ));
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -157,7 +147,7 @@ public class Expansion {
             }
 
             //check for citadel cells 
-            if(isIn(newRaw, y, safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !isIn(newRaw,y,citadels))){
+            if(StateUtils.isIn(newRaw, y, StateUtils.safeCitadels)&& (state.getTurn().equalsTurn("WHITE")|| !StateUtils.isIn(newRaw,y,StateUtils.citadels))){
                 break;
             }
             
@@ -166,7 +156,7 @@ public class Expansion {
                 break;
             }
             try {
-                result.add(new Action(createActionString(x, y),createActionString(newRaw, y),state.getTurn() ));
+                result.add(new Action(StateUtils.createActionString(x, y),StateUtils.createActionString(newRaw, y),state.getTurn() ));
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -176,43 +166,7 @@ public class Expansion {
 
         return result;
     }
-    private String createActionString(int x, int y){
-        String column="";
-
-        switch(y+1){
-            case 1:
-            column="a";
-            break;
-            case 2:
-            column="b";
-            break;
-            case 3:
-            column="c";
-            break;
-            case 4:
-            column="d";
-            break;
-            case 5:
-            column="e";
-            break;
-            case 6:
-            column="f";
-            break;
-            case 7:
-            column="g";
-            break;
-            case 8:
-            column="h";
-            break;
-            case 9:
-            column="i";
-            break;
-            
-        }
-        return column+Integer.toString(x+1);
-
-    }
-    public StateTablut result(StateTablut state, Action action) {
+        public StateTablut result(StateTablut state, Action action) {
         //TODO
         //clone state
         StateTablut result=state.clone();
@@ -231,44 +185,6 @@ public class Expansion {
         return result;
     }
 
-    public static boolean isIn(int x,int y, int[][] elements){
-        for(int i=0;i<elements.length;i++){
-            if(x==elements[i][0] &&y==elements[i][1])return true;
-        }
-        return false;
-
-    }
-    public List<int[]> getPawns(State state, String color){
-
-        List<int[]> result=new ArrayList<>();
-        for (int i=0;i<state.getBoard().length;i++) {
-            for (int j=0;j<state.getBoard().length;j++) {
-                if(state.getPawn(i, j).equalsPawn(color)){
-                    
-                    int[] coordinates =new int[2];
-                    coordinates[0]=i;
-                    coordinates[1]=j;
-                    result.add(coordinates);
-                }
-             
-            }
-        }
-        return result;
-    }
-    public int[] getKing(State state){
-
-        int[] result=new int[2];
-        for (int i=0;i<state.getBoard().length;i++) {
-            for (int j=0;j<state.getBoard().length;j++) {
-                if(state.getPawn(i, j).equalsPawn("KING")){
-                    
-                    result[0]=i;
-                    result[1]=j;
-                }
-             
-            }
-        }
-        return result;
-    }
+    
     
 }
