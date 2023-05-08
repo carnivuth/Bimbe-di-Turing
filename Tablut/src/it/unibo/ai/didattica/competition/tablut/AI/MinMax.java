@@ -1,8 +1,6 @@
 package it.unibo.ai.didattica.competition.tablut.AI;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
@@ -15,11 +13,9 @@ public class MinMax {
     private int currDepthLimit;
     private Turn player;
     private Turn enemy;
-    private List<String> citadels = new ArrayList<>();
     private final Heuristic heuristic;
 
     // risultati
-    private static Action result;
     private static Set<Action> possibleActions;
 
     private Expansion myExpansion = new Expansion();
