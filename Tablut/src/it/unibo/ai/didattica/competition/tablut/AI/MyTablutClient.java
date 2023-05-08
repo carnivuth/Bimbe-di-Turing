@@ -64,7 +64,8 @@ public class MyTablutClient extends TablutClient {
 
     private void clientRoutine(MinMax minmax, Turn myTurn) throws ClassNotFoundException, IOException {
         Action action;
-        while (true) {
+        boolean ended=false;
+        while (!ended) {
             this.read();
             if (this.getCurrentState().getTurn().equals(myTurn)) {
 
@@ -73,6 +74,11 @@ public class MyTablutClient extends TablutClient {
             } else {
                 System.out.println("Waiting for the opponent move...");
             }
+            //check for end of the game
+            if(this.getCurrentState().getTurn().equals(Turn.WHITEWIN)||this.getCurrentState().getTurn().equals(Turn.BLACKWIN)||this.getCurrentState().getTurn().equals(Turn.DRAW)){
+                ended=true;
+            }
+
         }
 
     }
