@@ -14,6 +14,7 @@ public class MinMax {
 
     private int currDepthLimit;
     private Turn player;
+    private Turn enemy;
     private List<String> citadels = new ArrayList<>();
     private final Heuristic heuristic;
 
@@ -26,6 +27,7 @@ public class MinMax {
     public MinMax(int currDepthLimit, State.Turn player) {
         this.currDepthLimit = currDepthLimit;
         this.player = player;
+        this.enemy=(player.equalsTurn("W"))?Turn.valueOf("BLACK"):Turn.valueOf("WHITE");
         this.heuristic = new Heuristic();
 
         possibleActions = new HashSet<>();
@@ -38,8 +40,9 @@ public class MinMax {
         double bestValue = Double.NEGATIVE_INFINITY;
         double alpha = Double.NEGATIVE_INFINITY;
         double beta = Double.POSITIVE_INFINITY;
+        
 
-        possibleActions = myExpansion.actions(currentState,myExpansion.getPawns(currentState, "BLACK"),myExpansion.getKing(currentState),myExpansion.getPawns(currentState,"WHITE"));
+        possibleActions = myExpansion.actions(currentState,StateUtils.getPawns(currentState, "B"),StateUtils.getKing(currentState),StateUtils.getPawns(currentState,"W"),player.name());
 
         for (Action a : possibleActions) {
             System.out.println(a.toString());
@@ -60,9 +63,10 @@ public class MinMax {
             return evaluate(state);
         }
         double value = Double.NEGATIVE_INFINITY;
-        for (Action a : myExpansion.actions(state,myExpansion.getPawns(state, "BLACK"),myExpansion.getKing(state),myExpansion.getPawns(state,"WHITE"))) {
+        for (Action a : myExpansion.actions(state,StateUtils.getPawns(state, "B"),StateUtils.getKing(state),StateUtils.getPawns(state,"W"),player.name())) {
             StateTablut newState = myExpansion.result(state, a);
             value = Math.max(value, minValue(newState, alpha, beta, depth + 1));
+            System.out.println(value);
             if (value >= beta) {
                 return value;
             }
@@ -76,9 +80,10 @@ public class MinMax {
             return evaluate(state);
         }
         double value = Double.POSITIVE_INFINITY;
-        for (Action a : myExpansion.actions(state,myExpansion.getPawns(state, "BLACK"),myExpansion.getKing(state),myExpansion.getPawns(state,"WHITE"))) {
+        for (Action a : myExpansion.actions(state,StateUtils.getPawns(state, "B"),StateUtils.getKing(state),StateUtils.getPawns(state,"W"),this.enemy.name())) {
             StateTablut newState = myExpansion.result(state, a);
             value = Math.min(value, maxValue(newState, alpha, beta, depth + 1));
+            System.out.println(value);
             if (value <= alpha) {
                 return value;
             }
