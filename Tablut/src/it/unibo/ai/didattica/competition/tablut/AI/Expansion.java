@@ -162,11 +162,13 @@ public class Expansion {
         
         //clone state
         BimbeState result=state.clone();
-        System.out.println("old state");
+        
+        /*System.out.println("old state");
         System.out.println(state.boardString());
         
         System.out.println("new state");
-        System.out.println(result.boardString());
+        System.out.println(result.boardString());*/
+        result.setTurn((result.getTurn().equalsTurn("B"))?Turn.WHITE:Turn.BLACK);
         //get future state
         int x= action.getRowFrom();
         int y= action.getColumnFrom();
