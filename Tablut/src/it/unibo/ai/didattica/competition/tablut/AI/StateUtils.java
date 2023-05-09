@@ -68,39 +68,8 @@ public class StateUtils {
     }
 
     public static String createActionString(int x, int y) {
-        String column = "";
-
-        switch (y + 1) {
-            case 1:
-                column = "a";
-                break;
-            case 2:
-                column = "b";
-                break;
-            case 3:
-                column = "c";
-                break;
-            case 4:
-                column = "d";
-                break;
-            case 5:
-                column = "e";
-                break;
-            case 6:
-                column = "f";
-                break;
-            case 7:
-                column = "g";
-                break;
-            case 8:
-                column = "h";
-                break;
-            case 9:
-                column = "i";
-                break;
-
-        }
-        return column + Integer.toString(x + 1);
+        
+        return Character.toString(Character.toChars(y+97)[0]) + Integer.toString(x + 1);
 
     }
 
