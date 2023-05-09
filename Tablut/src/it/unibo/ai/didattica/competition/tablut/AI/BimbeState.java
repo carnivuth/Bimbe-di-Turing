@@ -4,13 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.unibo.ai.didattica.competition.tablut.domain.State;
+import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 
-public class BimbeState {
+public class BimbeState extends StateTablut{
     private List<int []> blackPawns;
     private List<int []> whitePawns;
+   
     public BimbeState(State state){
+        this.board=state.getBoard().clone();
         blackPawns=initPawns(state,"B");
         whitePawns=initPawns(state,"W");
+
+    }
+    public BimbeState(State state,List<int []> blackPawns,List<int []> whitePawns){
+        this.board=state.getBoard().clone();
+        this.blackPawns=new ArrayList<>(blackPawns);
+        this.whitePawns=new ArrayList<>(blackPawns);
 
     }
     public List<int[]> getPawns(String color){
@@ -32,5 +41,27 @@ public class BimbeState {
             }
         }
         return result;
+    }
+    public BimbeState clone(){
+        BimbeState result =new BimbeState(this,this.blackPawns,this.whitePawns);
+        return result;
+    }
+    public void deletePawn(int x, int y,String color){
+        this.board[x][y]=Pawn.EMPTY;
+        if(color.equals("W")){
+            for (int i =0; i<this.whitePawns.size();i++){
+                if (whitePawns.get(i)[0]==x &&whitePawns.get(i)[1]==y){
+                    whitePawns.remove(i);
+                    return;
+                }
+            }
+        }else{
+            for (int i =0; i<this.blackPawns.size();i++){
+                if (blackPawns.get(i)[0]==x &&blackPawns.get(i)[1]==y){
+                    blackPawns.remove(i);
+                    return;
+                }
+            }
+        }
     }
 }
