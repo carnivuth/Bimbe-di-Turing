@@ -158,7 +158,7 @@ public class Expansion {
 
         return result;
     }
-        public StateTablut result(BimbeState state, Action action) {
+        public BimbeState result(BimbeState state, Action action) {
         
         //clone state
         BimbeState result=state.clone();

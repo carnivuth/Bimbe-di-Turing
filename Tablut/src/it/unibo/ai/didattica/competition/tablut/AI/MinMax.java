@@ -54,7 +54,7 @@ public class MinMax {
 
         for (Action a : possibleActions) {
             System.out.println("Action: " + a.toString());
-            StateTablut newState = myExpansion.result(new BimbeState(currentState), a);
+            BimbeState newState = myExpansion.result(new BimbeState(currentState), a);
             double value = minValue(newState, alpha, beta, 0);
             System.out.println("Value ritornato: " + value);
             if (value >= bestValue) {
@@ -90,7 +90,7 @@ public class MinMax {
         return resultAction;
     }
 
-    private double maxValue(StateTablut state, double alpha, double beta, int depth) {
+    private double maxValue(BimbeState state, double alpha, double beta, int depth) {
 
         List<int[]> blackPawns = StateUtils.getPawns(state, "B");
         List<int[]> whitePawns = StateUtils.getPawns(state, "W");
@@ -101,7 +101,7 @@ public class MinMax {
 
         double value = Double.NEGATIVE_INFINITY;
         for (Action a : myExpansion.actions(state, blackPawns, StateUtils.getKing(state), whitePawns, player)) {
-            StateTablut newState = myExpansion.result(new BimbeState(state), a);
+            BimbeState newState = myExpansion.result(new BimbeState(state), a);
             value = Math.max(value, minValue(newState, alpha, beta, depth + 1));
             System.out.println("min: " + (depth + 1) + " -> " + value);
 
@@ -116,7 +116,7 @@ public class MinMax {
         return value;
     }
 
-    private double minValue(StateTablut state, double alpha, double beta, int depth) {
+    private double minValue(BimbeState state, double alpha, double beta, int depth) {
 
         List<int[]> blackPawns = StateUtils.getPawns(state, "B");
         List<int[]> whitePawns = StateUtils.getPawns(state, "W");
@@ -127,7 +127,7 @@ public class MinMax {
         System.out.println("MIN VALUE " + depth + "alpha: " + alpha + " beta: " + beta);
         double value = Double.POSITIVE_INFINITY;
         for (Action a : myExpansion.actions(state, blackPawns, StateUtils.getKing(state), whitePawns, this.enemy)) {
-            StateTablut newState = myExpansion.result(new BimbeState(state), a);
+            BimbeState newState = myExpansion.result(new BimbeState(state), a);
             value = Math.min(value, maxValue(newState, alpha, beta, depth + 1));
             System.out.println("max: " + (depth + 1) + " -> " + value);
             if (value <= alpha) {
@@ -145,7 +145,7 @@ public class MinMax {
                 || state.getTurn().equals(Turn.DRAW);
     }
 
-    private double evaluate(StateTablut state, Turn color, int blackPawns, int whitePawns) {
+    private double evaluate(BimbeState state, Turn color, int blackPawns, int whitePawns) {
 
         return heuristic.evaluate(state);
     }
