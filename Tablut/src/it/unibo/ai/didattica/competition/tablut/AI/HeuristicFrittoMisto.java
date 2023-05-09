@@ -59,7 +59,8 @@ public class HeuristicFrittoMisto implements Heuristic {
     public double evaluate(BimbeState state) {
 
         // get turn color
-        double color = ((state.getTurn() == State.Turn.WHITE || state.getTurn() == State.Turn.WHITEWIN) ? 1 : -1);
+      
+        double color = ((state.getTurn().equalsTurn("W") || state.getTurn().equalsTurn("WW")) ? 1 : -1);
 
         // pawns
         // Pawn[][] pieces = state.getBoard();
