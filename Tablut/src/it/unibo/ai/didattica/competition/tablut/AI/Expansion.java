@@ -191,51 +191,51 @@ public class Expansion {
         Pawn enemy=(pawn.equalsPawn(Pawn.BLACK))?Pawn.WHITE:Pawn.BLACK;
         //check for limit
         if(bottomSide+1<9){
-            if(state.getPawn(x, bottomSide).equalsPawn(enemy) && state.getPawn(x, bottomSide+1).equalsPawn(pawn)){
-               ///capture bottom
-               state.deletePawn(x, bottomSide,enemy );
+            if(state.getPawn(x, bottomSide).equalsPawn(enemy)){
+                if(state.getPawn(x, bottomSide+1).equalsPawn(pawn) ||
+                 (state.getPawn(x, bottomSide+1).equalsPawn(Pawn.THRONE) || StateUtils.isIn(x, bottomSide+1, StateUtils.getCitadels()) )){
+                    ///capture bottom
+                    state.deletePawn(x, bottomSide,enemy );
+                }
+             
             } 
-            if(pawn.equalsPawn(Pawn.BLACK) &&
-            state.getPawn(x, bottomSide).equalsPawn(enemy) &&
-            (state.getPawn(x, bottomSide+1).equalsPawn(Pawn.THRONE) || StateUtils.isIn(x, bottomSide+1, StateUtils.getCitadels()) )){
-                state.deletePawn(x, bottomSide,enemy );
-            }    
+            
         }
         if(upSide-1>=0){
-            if(state.getPawn(x, upSide).equalsPawn(enemy) && state.getPawn(x, upSide-1).equalsPawn(pawn)){
-                //capture top
-               state.deletePawn(x, upSide,enemy );
+            if(state.getPawn(x, upSide).equalsPawn(enemy)){
+                if(state.getPawn(x, upSide-1).equalsPawn(pawn) || 
+                (state.getPawn(x, upSide-1).equalsPawn(Pawn.THRONE) || StateUtils.isIn(x, upSide-1, StateUtils.getCitadels()) )){
+                        //capture top
+                        state.deletePawn(x, upSide,enemy );
+                }
+             
 
             }
-            if(pawn.equalsPawn(Pawn.BLACK) &&
-            state.getPawn(x, upSide).equalsPawn(enemy) &&
-            (state.getPawn(x, upSide-1).equalsPawn(Pawn.THRONE) || StateUtils.isIn(x, upSide-1, StateUtils.getCitadels()) )){
-                state.deletePawn(x, upSide,enemy );
-            }     
+              
         }
         if(leftSide-1>=0){
-            if(state.getPawn(leftSide, y).equalsPawn(enemy) && state.getPawn(leftSide-1, y).equalsPawn(pawn)){
-                //capture left
-               state.deletePawn(leftSide, y,enemy );
+            if(state.getPawn(leftSide, y).equalsPawn(enemy) ){
+                if(state.getPawn(leftSide-1, y).equalsPawn(pawn) ||
+                (state.getPawn(leftSide-1, y).equalsPawn(Pawn.THRONE) || StateUtils.isIn(leftSide-1, y, StateUtils.getCitadels()) )){
+                    //capture left
+                    state.deletePawn(leftSide, y,enemy );
+                }
+
 
             }   
-            if(pawn.equalsPawn(Pawn.BLACK) &&
-            state.getPawn(leftSide, y).equalsPawn(enemy) &&
-            (state.getPawn(leftSide-1, y).equalsPawn(Pawn.THRONE) || StateUtils.isIn(leftSide-1, y, StateUtils.getCitadels()) )){
-                state.deletePawn(leftSide, y,enemy );
-            } 
+           
         }
         if(rightSide+1<9){
-            if(state.getPawn(rightSide, y).equalsPawn(enemy) && state.getPawn(rightSide+1, y).equalsPawn(pawn)){
-                //capture right
-               state.deletePawn(rightSide, y,enemy );
+            if(state.getPawn(rightSide, y).equalsPawn(enemy) ){
+                if(state.getPawn(rightSide+1, y).equalsPawn(pawn) ||
+                (state.getPawn(rightSide+1, y).equalsPawn(Pawn.THRONE) || StateUtils.isIn(rightSide+1, y, StateUtils.getCitadels()) )){
+                    //capture right
+                    state.deletePawn(rightSide, y,enemy );
+                }
+                
 
             }    
-            if(pawn.equalsPawn(Pawn.BLACK) &&
-            state.getPawn(rightSide, y).equalsPawn(enemy) &&
-            (state.getPawn(rightSide+1, y).equalsPawn(Pawn.THRONE) || StateUtils.isIn(rightSide+1, y, StateUtils.getCitadels()) )){
-                state.deletePawn(rightSide, y,enemy );
-            }
+            
         }
     
         
