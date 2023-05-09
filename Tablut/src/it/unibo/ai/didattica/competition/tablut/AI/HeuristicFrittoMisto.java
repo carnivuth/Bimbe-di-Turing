@@ -4,12 +4,11 @@ import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
- * @author E.Cerulo, V.M.Stanzione
+ * @author RootLeo00
  *
  */
 
@@ -28,6 +27,7 @@ public class HeuristicFrittoMisto implements Heuristic {
     private int[][] citadels;
     private int[][] escapes;
     private static int[] weight;
+    private Pawn[][] board;
 
     /*** color ***/
     private final State.Turn playerColor; // il colore del client
@@ -35,7 +35,7 @@ public class HeuristicFrittoMisto implements Heuristic {
 
     /**************** WIN ***********************/
 
-    public HeuristicFrittoMisto() {
+    public HeuristicFrittoMisto(Pawn[][] board) {
         this.color = 0;
         this.playerColor = State.Turn.WHITE;
         this.escapes = StateUtils.getEscapes();
@@ -43,6 +43,7 @@ public class HeuristicFrittoMisto implements Heuristic {
     }
 
     public HeuristicFrittoMisto(StateTablut state) {
+        this.board = state.getBoard();
         this.playerColor = state.getTurn();
         this.escapes = StateUtils.getEscapes();
         this.color = ((playerColor == State.Turn.WHITE || playerColor == State.Turn.WHITEWIN) ? 1 : -1);
@@ -84,9 +85,9 @@ public class HeuristicFrittoMisto implements Heuristic {
         int[] king = StateUtils.getKing(state);
 
         double V = weight[KING_MANHATTAN] * kingManhattan(king) +
-                // weight[KING_CAPTURED_SIDES] * kingCapture(king, blackPieces) +
-                // weight[PAWNS_DIFFERENCE] * lostPaws(blackPieces, whitePieces,
-                // state.getTurn()) +
+        // weight[KING_CAPTURED_SIDES] * kingCapture(king, blackPieces) +
+        // weight[PAWNS_DIFFERENCE] * lostPaws(blackPieces, whitePieces,
+        // state.getTurn()) +
                 weight[PAWNS_WHITE] * whitePieces.size() +
                 // weight[VICTORY_PATH] * victoryPaths(king, blackPieces, whitePieces) +
                 // weight[VICTORY] * winCondition(state.getTurn()) +
@@ -112,7 +113,7 @@ public class HeuristicFrittoMisto implements Heuristic {
                 minDistance = distance;
             }
         }
-        return minDistance;
+        return 6 - minDistance;
     }
 
     /**
@@ -121,28 +122,53 @@ public class HeuristicFrittoMisto implements Heuristic {
      **/
     public double kingCapture(int[] king, List<int[]> blackPieces) {
         double count = 0;
+        int x = king[0];
+        int y = king[1] + 1;
 
-        // black pieces near king
-        for (int[] black : blackPieces) {
-            if (Math.abs(king[0] - black[0]) <= 1 && Math.abs(king[1] - black[1]) <= 1) {
-                count++;
-            }
+        if (isBlackPiece(blackPieces, x, y) || isCitadel(blackPieces, x, y)  ||isCastle(castle, x, y)) {
+            count++;
         }
-
-        // castle near king
-        if (king[0] == castle[0] && Math.abs(king[1] - castle[1]) <= 1
-                || king[1] == castle[1] && Math.abs(king[0] - castle[0]) <= 1) {
+        x = king[0];
+        y = king[1] - 1;
+        if (isBlackPiece(blackPieces, x, y) || isCitadel(blackPieces, x, y) || isCastle(castle, x, y)) {
+            count++;
+        }
+        x = king[0] + 1;
+        y = king[1];
+        if (isBlackPiece(blackPieces, x, y) || isCitadel(blackPieces, x, y) || isCastle(castle, x, y)) {
+            count++;
+        }
+        x = king[0] - 1;
+        y = king[1];
+        if (isBlackPiece(blackPieces, x, y) || isCitadel(blackPieces, x, y) || isCastle(castle, x, y)) {
             count++;
         }
 
-        // citadels near king
-        for (int[] citadel : citadels) {
-            if (Math.abs(king[0] - citadel[0]) <= 1 && Math.abs(king[1] - citadel[1]) <= 1) {
-                count++;
-            }
-        }
+        System.out.println("king capture - castls + blacks + citadels: " + count);
 
         return count;
+    }
+
+    private boolean isBlackPiece(List<int[]> blackPieces, int x, int y) {
+        for (int[] is : blackPieces) {
+            if (is[0] == x && is[1] == y)
+                return true;
+        }
+        return false;
+    }
+
+    private boolean isCitadel(List<int[]> citadels, int x, int y) {
+        for (int[] is : citadels) {
+            if (is[0] == x && is[1] == y)
+                return true;
+        }
+        return false;
+    }
+
+    private boolean isCastle(int[] castle, int x, int y) {
+        if (castle[0] == x && castle[1] == y)
+            return true;
+        return false;
     }
 
     /**
@@ -164,57 +190,41 @@ public class HeuristicFrittoMisto implements Heuristic {
      * WEIGHT 4
      * finds the number of open paths to victory for the king
      **/
-    public double victoryPaths(int[] king, List<int[]> blackPieces, List<int[]> whitePieces) {
-        int paths = 0;
+    public int victoryPaths(int[] king, List<int[]> blackPieces, List<int[]> whitePieces) {
+        int piecesInTheRow = 0;
+        int piecesInTheCol =0;
+
         // check if king is in the same row or column of an escape
-        List<int[]> victoryPos = victoryRoads(king);
-
-        if (victoryPos.isEmpty())
+        if (!StateUtils.isIn(king[0], king[1], StateUtils.possibleOpenPaths))
             return 0;
-
-        // check if there are pieces between the king and the victoryPos
-        for (int[] victory : victoryPos) {
+        else {
+            // check if there is a black piece in the same row or column of king
             for (int[] black : blackPieces) {
-                // check if piece is in the same row of the victoryPos
-                if (black[0] == victory[0]) {
-                    return 0;
+                if (black[0] == king[0] ) {
+                    piecesInTheRow++;
                 }
-                // check if piece is in the same column of the victoryPos
-                if (black[1] == victory[1]) {
-                    return 0;
+                if(black[1] == king[1]){
+                    piecesInTheCol++;
                 }
             }
+            // check if there is a white piece in the same row or column of king
             for (int[] white : whitePieces) {
-                // check if piece is in the same row of the victoryPos
-                if (white[0] == victory[0]) {
-                    return 0;
-                }
-                // check if piece is in the same column of the victoryPos
-                if (white[1] == victory[1]) {
-                    return 0;
-                }
-            }
-            paths++;
-        }
-        return paths;
-
-    }
-
-    /***
-     * check if king is in the same row or column of an escape
-     ***/
-    private List<int[]> victoryRoads(int[] king) {
-        List<int[]> victoryPos = new ArrayList<int[]>();
-        // check column
-        for (int[] row_escape : StateUtils.getEscapes()) {
-            for (int r : row_escape) {
-                if (king[0] == r) {
-                    victoryPos.add(row_escape);
+                if (white[0] == king[0] || white[1] == king[1]) {
+                    if (white[0] == king[0] ) {
+                        piecesInTheRow++;
+                    }
+                    if(white[1] == king[1]){
+                        if(piecesInTheRow!=0) return 0;
+                        piecesInTheCol++;
+                    }
                 }
             }
         }
-        // check row
-        return victoryPos;
+        if(piecesInTheRow!=0 || piecesInTheCol!=0) {
+            return 1;
+        } 
+        else return 0;
+
     }
 
     /*** 5 ***/
