@@ -8,54 +8,35 @@ import java.util.Set;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
+import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
 
 public class Expansion {
 
     
 
-    public Set<Action> actions(StateTablut state,List<int []> blackPawns,int[] king,List<int []> whitePawns,String color) {
+    public Set<Action> actions(StateTablut state,List<int []> blackPawns,int[] king,List<int []> whitePawns,Turn color) {
         Set<Action> result=new HashSet<>();
      
             //get moves
-            if(color.equals("WHITE")){
+            if(color.equalsTurn("W")){
+                result.addAll(getPossibleMovements(state.getPawn(king[0],king[1] ),king[0],king[1], state,color));
+               
                 for (int[] coordinates : whitePawns) {
                     result.addAll(getPossibleMovements(state.getPawn(coordinates[0],coordinates[1] ),coordinates[0],coordinates[1], state,color));
                 }
-                result.addAll(getPossibleMovements(state.getPawn(king[0],king[1] ),king[0],king[1], state,color));
-
-
-                /*for (int i=0;i<state.getBoard().length;i++) {
-                    for (int j=0;j<state.getBoard().length;j++) {
-                        if(state.getPawn(i, j).equals(Pawn.WHITE)){
-                     
-                            result.addAll(getPossibleMovements(state.getPawn(i, j),i,j, state));
-                        }
-                        if(state.getPawn(i, j).equals(Pawn.KING)){
-                     
-                            result.addAll(getPossibleMovements(state.getPawn(i, j),i,j, state));
-                        }
-                    }
-                }*/
+            
             }else{
+              
                 for (int[] coordinates : blackPawns) {
                     result.addAll(getPossibleMovements(state.getPawn(coordinates[0],coordinates[1] ),coordinates[0],coordinates[1], state,color));
                 }
-                /*for (int i=0;i<state.getBoard().length;i++) {
-                    for (int j=0;j<state.getBoard().length;j++) {
-                        if(state.getPawn(i, j).equals(Pawn.BLACK)){
-                     
-                            result.addAll(getPossibleMovements(state.getPawn(i, j),i,j, state));
-                        }
-                    
-                    }
-                }*/
             }
         
 
         return result;
     }
-    public Set<Action> getPossibleMovements(Pawn pawn,int x,int y, StateTablut state,String color){
+    public Set<Action> getPossibleMovements(Pawn pawn,int x,int y, StateTablut state,Turn color){
         Set<Action> result=new HashSet<>();
         int newColumn=y-1;
 
@@ -66,10 +47,10 @@ public class Expansion {
                 break;
             }
             //check for citadel cells 
-           if(StateUtils.isIn(x, newColumn, StateUtils.citadels)&& color.equals("WHITE")){
+           if(StateUtils.isIn(x, newColumn, StateUtils.citadels)&& color.equalsTurn("W")){
             break;
             }
-            if(StateUtils.isIn(x, newColumn, StateUtils.citadels)&& color.equals("BLACK") && !StateUtils.isIn(x, y,StateUtils.citadels)){
+            if(StateUtils.isIn(x, newColumn, StateUtils.citadels)&& color.equalsTurn("B") && !StateUtils.isIn(x, y,StateUtils.citadels)){
                 break;
             }
 
@@ -95,10 +76,10 @@ public class Expansion {
                 break;
             }
             //check for citadel cells 
-            if(StateUtils.isIn(x, newColumn, StateUtils.citadels)&& color.equals("WHITE")){
+            if(StateUtils.isIn(x, newColumn, StateUtils.citadels)&& color.equalsTurn("W")){
                 break;
             }
-             if(StateUtils.isIn(x, newColumn, StateUtils.citadels)&& color.equals("BLACK") && !StateUtils.isIn(x, y,StateUtils.citadels)){
+             if(StateUtils.isIn(x, newColumn, StateUtils.citadels)&& color.equalsTurn("B") && !StateUtils.isIn(x, y,StateUtils.citadels)){
                 break;
             }
 
@@ -123,10 +104,10 @@ public class Expansion {
                 break;
             }
             //check for citadel cells 
-            if(StateUtils.isIn(newRaw, y, StateUtils.citadels)&& color.equals("WHITE")){
+            if(StateUtils.isIn(newRaw, y, StateUtils.citadels)&& color.equalsTurn("W")){
                 break;
             }
-            if(StateUtils.isIn(newRaw, y, StateUtils.citadels)&& color.equals("BLACK") && !StateUtils.isIn(x, y,StateUtils.citadels)){
+            if(StateUtils.isIn(newRaw, y, StateUtils.citadels)&& color.equalsTurn("B") && !StateUtils.isIn(x, y,StateUtils.citadels)){
                 break;
             }
 
@@ -154,10 +135,10 @@ public class Expansion {
             }
 
             //check for citadel cells 
-            if(StateUtils.isIn(newRaw, y, StateUtils.citadels)&& color.equals("WHITE")){
+            if(StateUtils.isIn(newRaw, y, StateUtils.citadels)&& color.equalsTurn("W")){
                 break;
             }
-            if(StateUtils.isIn(newRaw, y, StateUtils.citadels)&& color.equals("BLACK") && !StateUtils.isIn(x, y,StateUtils.citadels)){
+            if(StateUtils.isIn(newRaw, y, StateUtils.citadels)&& color.equalsTurn("B") && !StateUtils.isIn(x, y,StateUtils.citadels)){
                 break;
             }
             
