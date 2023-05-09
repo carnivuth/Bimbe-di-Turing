@@ -1,10 +1,12 @@
 package it.unibo.ai.didattica.competition.tablut.AI;
 
+import java.util.Random;
+
 import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
-public class HeuristicGA implements Heuristic{
+public class HeuristicGA implements Heuristic {
 
     private double[] weights;
 
@@ -26,17 +28,21 @@ public class HeuristicGA implements Heuristic{
 
     @Override
     public double evaluate(StateTablut state) {
-        // get white and black pawns 
-        Turn color= state.getTurn();
-        int blackPawns = StateUtils.getPawns(state, Pawn.BLACK.toString()).size();
-        int whitePawns = StateUtils.getPawns(state, Pawn.BLACK.toString()).size();
-        
-        // retrive values from list instead 
-        int[] king_pos = StateUtils.getKing(state);
+        // // get white and black pawns
+        // Turn color= state.getTurn();
+        // int blackPawns = StateUtils.getPawns(state, Pawn.BLACK.toString()).size();
+        // int whitePawns = StateUtils.getPawns(state, Pawn.BLACK.toString()).size();
 
-        double val = (weights[7] * (weights[9] * whitePawns - weights[10] * blackPawns) + weights[8] * evalKingPos(state, king_pos));
+        // // retrive values from list instead
+        // int[] king_pos = StateUtils.getKing(state);
 
-        return (color.equalsTurn("W"))?val:-val;
+        // double val = (weights[7] * (weights[9] * whitePawns - weights[10] *
+        // blackPawns) + weights[8] * evalKingPos(state, king_pos));
+
+        // return (color.equalsTurn("W"))?val:-val;
+        // return random numer 1-30
+        Random rand = new Random();
+        return rand.nextInt(30) + 1;
     }
 
     public int evalKingPos(StateTablut state, int[] king_pos) {
