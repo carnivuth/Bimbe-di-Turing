@@ -46,9 +46,9 @@ public class BimbeState extends StateTablut{
         BimbeState result =new BimbeState(this,this.blackPawns,this.whitePawns);
         return result;
     }
-    public void deletePawn(int x, int y,String color){
+    public void deletePawn(int x, int y,Pawn color){
         this.board[x][y]=Pawn.EMPTY;
-        if(color.equals("W")){
+        if(color.equalsPawn(Pawn.WHITE)){
             for (int i =0; i<this.whitePawns.size();i++){
                 if (whitePawns.get(i)[0]==x &&whitePawns.get(i)[1]==y){
                     whitePawns.remove(i);
