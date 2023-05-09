@@ -17,7 +17,7 @@ public class BimbeState extends StateTablut{
 
     }
     public BimbeState(State state,List<int []> blackPawns,List<int []> whitePawns){
-        this.board=state.getBoard().clone();
+        super.clone();
         this.blackPawns=new ArrayList<>(blackPawns);
         this.whitePawns=new ArrayList<>(blackPawns);
 
