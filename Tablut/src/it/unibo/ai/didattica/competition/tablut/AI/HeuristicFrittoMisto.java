@@ -7,6 +7,7 @@ import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  *
  * @author E.Cerulo, V.M.Stanzione
@@ -27,7 +28,7 @@ public class HeuristicFrittoMisto implements Heuristic {
     private int[] castle;
     private int[][] citadels;
     private int[][] winPos;
-    private static double[] weight;
+    private static int[] weight;
 
     /*** color ***/
     private final State.Turn playerColor; // il colore del client
@@ -35,20 +36,27 @@ public class HeuristicFrittoMisto implements Heuristic {
 
     /**************** WIN ***********************/
 
+    public HeuristicFrittoMisto() {
+        this.color = 0;
+        this.playerColor = State.Turn.WHITE;
+        this.winPos = StateUtils.getEscapes();
+        initWeights();
+    }
+
     public HeuristicFrittoMisto(StateTablut state) {
         this.playerColor = state.getTurn();
-
+        this.winPos = StateUtils.getEscapes();
         this.color = ((playerColor == State.Turn.WHITE || playerColor == State.Turn.WHITEWIN) ? 1 : -1);
 
         initWeights();
     }
 
-    public static void setWeight(double[] weight) {
+    public static void setWeight(int[] weight) {
         HeuristicFrittoMisto.weight = weight;
     }
 
     private void initWeights() {
-        weight = new double[7];
+        weight = new int[7];
 
         // double pawnsCoef = (initialBlack) / initialWhite; //(16.0/9.0)
 
@@ -66,11 +74,11 @@ public class HeuristicFrittoMisto implements Heuristic {
     @Override
     public double evaluate(StateTablut state) {
 
-        // double color = ((playerColor == State.Turn.WHITE || playerColor ==
-        // State.Turn.WHITEWIN) ? 1 : -1);
+        // get turn color
+        double color = ((playerColor == State.Turn.WHITE || playerColor == State.Turn.WHITEWIN) ? 1 : -1);
 
         // pawns
-        Pawn[][] pieces = state.getBoard();
+        // Pawn[][] pieces = state.getBoard();
 
         List<int[]> blackPieces = StateUtils.getPawns(state, Pawn.BLACK.toString());
         List<int[]> whitePieces = StateUtils.getPawns(state, Pawn.WHITE.toString());
@@ -81,7 +89,7 @@ public class HeuristicFrittoMisto implements Heuristic {
                 // weight[PAWNS_DIFFERENCE] * lostPaws(blackPieces, whitePieces,
                 // state.getTurn()) +
                 weight[PAWNS_WHITE] * whitePieces.size() +
-                // weight[VICTORY_PATH] * victoryPaths(king, blackPieces, whitePieces) +
+                weight[VICTORY_PATH] * victoryPaths(king, blackPieces, whitePieces) +
                 // weight[VICTORY] * winCondition(state.getTurn()) +
                 weight[PAWNS_BLACK] * blackPieces.size();
 
@@ -97,12 +105,15 @@ public class HeuristicFrittoMisto implements Heuristic {
      * winPos
      * assuming that '6' is the maximum distance from the winPos
      **/
-    private double kingManhattan(int[] king) {
+    public double kingManhattan(int[] king) {
         double minDistance = 6;
         for (int[] row : winPos) {
             for (int col : row) {
-                double distance = king[0] - row[0] + king[1] - col;
+                System.out.println("win pos: " + row[0] + " , " + col);
+                double distance = Math.abs(king[0] - king[1]) + Math.abs(row[0] - col);
+
                 if (distance < minDistance) {
+                    System.out.println("distance: " + distance);
                     minDistance = distance;
                 }
             }
@@ -115,7 +126,7 @@ public class HeuristicFrittoMisto implements Heuristic {
      * WEIGHT 1
      * finds the number of black pieces or walls that are close to the king
      **/
-    private double kingCapture(int[] king, List<int[]> blackPieces) {
+    public double kingCapture(int[] king, List<int[]> blackPieces) {
         double count = 0;
 
         // black pieces near king
@@ -201,7 +212,7 @@ public class HeuristicFrittoMisto implements Heuristic {
      ***/
     private List<int[]> victoryRoads(int[] king) {
         List<int[]> victoryPos = new ArrayList<int[]>();
-        //check column
+        // check column
         for (int[] row_escape : StateUtils.getEscapes()) {
             for (int r : row_escape) {
                 if (king[0] == r) {
@@ -209,34 +220,46 @@ public class HeuristicFrittoMisto implements Heuristic {
                 }
             }
         }
-        //check row
+        // check row
         return victoryPos;
     }
 
     /*** 5 ***/
     // vittoria o sconfitta
     // private double winCondition(State.Turn turn, int depth) {
-    //     if (turn == State.Turn.WHITEWIN)
-    //         return 1.0 * depthBonus(depth);
-    //     if (turn == State.Turn.BLACKWIN)
-    //         return -1.0 * depthBonus(depth);
+    // if (turn == State.Turn.WHITEWIN)
+    // return 1.0 * depthBonus(depth);
+    // if (turn == State.Turn.BLACKWIN)
+    // return -1.0 * depthBonus(depth);
 
-    //     return 0;
+    // return 0;
     // }
 
     // // bonus su distanza da root
     // private double depthBonus(int depth) {
-    //     // return depth == 0 ? 2 : 1;
-    //     return (double) (depthLimit - depth) / (double) depthLimit + 1.0;
+    // // return depth == 0 ? 2 : 1;
+    // return (double) (depthLimit - depth) / (double) depthLimit + 1.0;
     // }
 
     /** 6 **/
     // pezzi neri
 
-    public static void main(String[] args) {
-        System.out.println("Test");
+    public static void printBoard(Pawn[][] board) {
+        for (Pawn[] row : board) {
+            for (Pawn p : row) {
+                System.out.print(p.toString());
+            }
+            System.out.println();
+        }
+    }
 
-        
+    public static void printBoard(int[][] board) {
+        for (int[] row : board) {
+            for (int p : row) {
+                System.out.print(p + " ");
+            }
+            System.out.println();
+        }
     }
 
 }
