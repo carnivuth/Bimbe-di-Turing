@@ -7,7 +7,6 @@ import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  *
  * @author E.Cerulo, V.M.Stanzione
@@ -107,19 +106,13 @@ public class HeuristicFrittoMisto implements Heuristic {
      **/
     public double kingManhattan(int[] king) {
         double minDistance = 6;
-        for (int[] row : winPos) {
-            for (int col : row) {
-                System.out.println("win pos: " + row[0] + " , " + col);
-                double distance = Math.abs(king[0] - king[1]) + Math.abs(row[0] - col);
-
-                if (distance < minDistance) {
-                    System.out.println("distance: " + distance);
-                    minDistance = distance;
-                }
+        for (int[] escape : winPos) {
+            double distance = Math.abs(king[0] - escape[0]) + Math.abs(king[1] - escape[1]);
+            if (distance < minDistance) {
+                minDistance = distance;
             }
-
         }
-        return 6 - minDistance;
+        return minDistance;
     }
 
     /**
@@ -254,12 +247,10 @@ public class HeuristicFrittoMisto implements Heuristic {
     }
 
     public static void printBoard(int[][] board) {
-        for (int[] row : board) {
-            for (int p : row) {
-                System.out.print(p + " ");
-            }
-            System.out.println();
+        for (int[] b : board) {
+            System.out.println("(" + b[0] + ", " + b[1] + ")");
         }
+
     }
 
 }

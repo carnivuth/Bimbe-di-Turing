@@ -19,10 +19,10 @@ public class MockMain {
         /*
          * populate board with :
          * [java] OOBBOBOOO
-         * [java] OOOBOOWKO
+         * [java] OOOBOOWOO
          * [java] OOOOOOOOO
          * [java] OBOBWOOBB
-         * [java] OBOWOWOOB
+         * [java] OBOWKWOOB
          * [java] BOOOWOOOO
          * [java] OOWOOOWOB
          * [java] OOOOOOOOB
@@ -41,12 +41,11 @@ public class MockMain {
         board[0][2] = Pawn.BLACK;
         board[0][3] = Pawn.BLACK;
         board[0][5] = Pawn.BLACK;
-        board[1][6] = Pawn.BLACK;
 
         // row 1: OOOBOOWOO
         board[1][4] = Pawn.BLACK;
-        board[1][6] = Pawn.WHITE;
-        board[1][7] = Pawn.KING;
+        board[1][6] = Pawn.KING;
+        board[1][7] = Pawn.EMPTY;
 
         // row 3: OBOBWOOBB
         board[3][1] = Pawn.BLACK;
@@ -58,7 +57,7 @@ public class MockMain {
         // row 4: OBOWKWOOB
         board[4][1] = Pawn.BLACK;
         board[4][3] = Pawn.WHITE;
-        board[4][4] = Pawn.EMPTY;
+        board[4][4] = Pawn.WHITE;
         board[4][5] = Pawn.WHITE;
         board[4][8] = Pawn.BLACK;
 
@@ -79,21 +78,16 @@ public class MockMain {
         board[8][4] = Pawn.BLACK;
         board[8][5] = Pawn.BLACK;
 
-        //list of black pieces
-        List<int[]> blackPieces = new ArrayList<int[]>();
-        blackPieces = getPawns(board, Pawn.BLACK.toString());
-        
-
         System.out.println("Board created");
         printBoard(board);
 
         //king
         int[] king = new int[2];
-        king[0] = 4;
-        king[1] = 4;
+        king[0] = 5;
+        king[1] = 3;
 
         double minDistance= h.kingManhattan(king);
-        System.out.println(minDistance);
+        System.out.println("Min distance: " + minDistance);
     }
 
     public static void printBoard(Pawn[][] board){
