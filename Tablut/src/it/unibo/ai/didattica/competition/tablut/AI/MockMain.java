@@ -6,12 +6,8 @@ import java.util.List;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 
 public class MockMain {
-    
+
     public static void main(String[] args) {
-
-        //instanziate class
-
-        HeuristicFrittoMisto h = new HeuristicFrittoMisto();
 
         System.out.println("Test");
         // create board example
@@ -43,7 +39,7 @@ public class MockMain {
         board[0][5] = Pawn.BLACK;
 
         // row 1: OOOBOOWOO
-        board[1][4] = Pawn.BLACK;
+        board[1][4] = Pawn.EMPTY;
         board[1][6] = Pawn.KING;
         board[1][7] = Pawn.EMPTY;
 
@@ -78,19 +74,29 @@ public class MockMain {
         board[8][4] = Pawn.BLACK;
         board[8][5] = Pawn.BLACK;
 
+        // instanziate class
+
+        HeuristicFrittoMisto h = new HeuristicFrittoMisto(board);
+
+        // get black pawns
+        List<int[]> blackPawns = getPawns(board, "B");
+
+        // get white pawns
+        List<int[]> whitePawns = getPawns(board, "W");
+
         System.out.println("Board created");
         printBoard(board);
 
-        //king
+        // king
         int[] king = new int[2];
-        king[0] = 5;
-        king[1] = 3;
+        king[0] = 1;
+        king[1] = 1;
 
-        double minDistance= h.kingManhattan(king);
-        System.out.println("Min distance: " + minDistance);
+        int result = h.victoryPaths(king, blackPawns, whitePawns);
+        System.out.println("Result: " + result);
     }
 
-    public static void printBoard(Pawn[][] board){
+    public static void printBoard(Pawn[][] board) {
         for (Pawn[] row : board) {
             for (Pawn p : row) {
                 System.out.print(p.toString());
