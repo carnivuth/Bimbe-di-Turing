@@ -51,6 +51,7 @@ public class StateUtils {
         return result;
     }
 
+
     public static int[] getKing(State state) {
 
         int[] result = new int[2];

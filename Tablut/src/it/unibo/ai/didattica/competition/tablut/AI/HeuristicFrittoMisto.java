@@ -52,16 +52,6 @@ public class HeuristicFrittoMisto implements Heuristic {
 
         // double pawnsCoef = (initialBlack) / initialWhite; //(16.0/9.0)
 
-        /*
-         * weight[KING_MANHATTAN] = 50; //manhattan
-         * weight[KING_CAPTURED_SIDES] = -100; //king capture
-         * weight[PAWNS_DIFFERENCE] = 100; //lost pawns
-         * weight[PAWNS_WHITE] = 100 * pawnsCoef; //white pieces (difference ?)
-         * weight[VICTORY_PATH] = 300; //victory path
-         * weight[VICTORY] = 5000; //victory
-         * weight[PAWNS_BLACK] = -100; //black pieces
-         */
-
         // POST GENETIC
         weight[KING_MANHATTAN] = 42; // manhattan
         weight[KING_CAPTURED_SIDES] = -147; // king capture
@@ -242,4 +232,11 @@ public class HeuristicFrittoMisto implements Heuristic {
 
     /** 6 **/
     // pezzi neri
+
+    public static void main(String[] args) {
+        System.out.println("Test");
+
+        
+    }
+
 }

@@ -4,7 +4,7 @@ import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
-public class HeuristicGA {
+public class HeuristicGA implements Heuristic{
 
     private double[] weights;
 
@@ -24,9 +24,13 @@ public class HeuristicGA {
         this.weights[10] = 1;
     }
 
-    public double eval(StateTablut state,Turn color, int blackPawns,int whitePawns) {
-
+    @Override
+    public double evaluate(StateTablut state) {
         // get white and black pawns 
+        Turn color= state.getTurn();
+        int blackPawns = StateUtils.getPawns(state, Pawn.BLACK.toString()).size();
+        int whitePawns = StateUtils.getPawns(state, Pawn.BLACK.toString()).size();
+        
         // retrive values from list instead 
         int[] king_pos = StateUtils.getKing(state);
 
