@@ -4,13 +4,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
-import javax.swing.plaf.SliderUI;
 
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
-import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
 public class MinMax {
@@ -29,13 +26,13 @@ public class MinMax {
         this.currDepthLimit = currDepthLimit;
         this.player = player;
         this.enemy = (player.equalsTurn("W")) ? Turn.valueOf("BLACK") : Turn.valueOf("WHITE");
-        this.heuristic = new HeuristicGA();
+        this.heuristic = new HeuristicFrittoMisto();
 
         possibleActions = new HashSet<>();
 
     }
 
-    public Action minmaxDecision(StateTablut currentState) {
+    public Action minmaxDecision(BimbeState currentState) {
         Action resultAction = null;
         System.out.println("MINMAX DECISION");
         System.out.println(currentState.boardString());
@@ -49,8 +46,7 @@ public class MinMax {
         List<Action> bestActions = new ArrayList<>();
         // System.out.println(currentState.toString());
 
-        possibleActions = myExpansion.actions(currentState, StateUtils.getPawns(currentState, "B"),
-                StateUtils.getKing(currentState), StateUtils.getPawns(currentState, "W"), player);
+        possibleActions = myExpansion.actions(currentState);
 
         for (Action a : possibleActions) {
             System.out.println("Action: " + a.toString());
@@ -83,7 +79,8 @@ public class MinMax {
         } else {
             resultAction = bestActions.get(0);
         }
-
+        System.out.println(currentState.getTurn().toString());
+        System.out.println(currentState.getTurn().equalsTurn("W"));
         System.out.println("Best value: " + bestValue);
         System.out.println("Result action: " + resultAction);
 
@@ -100,7 +97,7 @@ public class MinMax {
         }
 
         double value = Double.NEGATIVE_INFINITY;
-        for (Action a : myExpansion.actions(state, blackPawns, StateUtils.getKing(state), whitePawns, player)) {
+        for (Action a : myExpansion.actions(state)) {
             BimbeState newState = myExpansion.result(new BimbeState(state), a);
             value = Math.max(value, minValue(newState, alpha, beta, depth + 1));
             System.out.println("min: " + (depth + 1) + " -> " + value);
@@ -126,7 +123,7 @@ public class MinMax {
         }
         System.out.println("MIN VALUE " + depth + "alpha: " + alpha + " beta: " + beta);
         double value = Double.POSITIVE_INFINITY;
-        for (Action a : myExpansion.actions(state, blackPawns, StateUtils.getKing(state), whitePawns, this.enemy)) {
+        for (Action a : myExpansion.actions(state)) {
             BimbeState newState = myExpansion.result(new BimbeState(state), a);
             value = Math.min(value, maxValue(newState, alpha, beta, depth + 1));
             System.out.println("max: " + (depth + 1) + " -> " + value);
