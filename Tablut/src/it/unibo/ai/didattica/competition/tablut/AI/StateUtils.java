@@ -12,7 +12,7 @@ public class StateUtils {
             { 3, 8 }, { 4, 8 }, { 5, 8 }, { 4, 7 },
             { 3, 0 }, { 4, 0 }, { 5, 0 }, { 4, 1 } };
 
-    public static final int[][] safeCitadels = { { 0, 3 }, { 0, 4 }, { 0, 4 },
+    public static final int[][] safeCitadels = { { 0, 3 }, { 0, 4 }, { 0, 5 },
             { 8, 3 }, { 8, 4 }, { 8, 5 },
             { 3, 8 }, { 4, 8 }, { 5, 8 },
             { 3, 0 }, { 4, 0 }, { 5, 0 } };
