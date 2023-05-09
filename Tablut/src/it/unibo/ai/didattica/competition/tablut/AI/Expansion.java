@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.plaf.basic.BasicScrollPaneUI.ViewportChangeHandler;
+
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
@@ -149,7 +151,7 @@ public class Expansion {
             try {
                 result.add(new Action(StateUtils.createActionString(x, y),StateUtils.createActionString(newRaw, y),state.getTurn() ));
             } catch (IOException e) {
-                // TODO Auto-generated catch block
+                
                 e.printStackTrace();
             }
             newRaw+=1;
@@ -157,10 +159,10 @@ public class Expansion {
 
         return result;
     }
-        public StateTablut result(StateTablut state, Action action) {
-        //TODO
+        public StateTablut result(BimbeState state, Action action) {
+        
         //clone state
-        StateTablut result=state.clone();
+        BimbeState result=state.clone();
         //get future state
         int x= action.getRowFrom();
         int y= action.getColumnFrom();
@@ -170,10 +172,69 @@ public class Expansion {
         
         result.getBoard()[toX][toY]=result.getPawn(x, y);
         result.getBoard()[x][y]=Pawn.EMPTY;
-        //TODO check for captured pawns and update lists
-        
+        this.checkCapture(result, toX, toY);
+       
         //return new state
         return result;
+    }
+
+    public void checkCapture(BimbeState state,int x, int y){
+        int leftSide=x-1;
+        int rightSide=x+1;
+        int upSide=y-1;
+        int bottomSide=y+1;
+        Pawn pawn =state.getPawn(x, y);
+        Pawn enemy=(pawn.equalsPawn(Pawn.BLACK))?Pawn.WHITE:Pawn.BLACK;
+        //check for limit
+        if(bottomSide+1<9){
+            if(!state.getPawn(x, bottomSide).equalsPawn(pawn) && state.getPawn(x, bottomSide+1).equalsPawn(pawn)){
+               ///capture bottom
+               state.deletePawn(x, bottomSide,enemy.name() );
+            } 
+            if(pawn.equalsPawn(Pawn.BLACK) &&
+            !state.getPawn(x, bottomSide).equalsPawn(pawn) &&
+            (state.getPawn(x, bottomSide+1).equalsPawn(Pawn.THRONE) || StateUtils.isIn(x, bottomSide+1, StateUtils.getCitadels()) )){
+                state.deletePawn(x, bottomSide,enemy.name() );
+            }    
+        }
+        if(upSide-1>=0){
+            if(!state.getPawn(x, upSide).equalsPawn(pawn) && state.getPawn(x, upSide-1).equalsPawn(pawn)){
+                //capture top
+               state.deletePawn(x, upSide,enemy.name() );
+
+            }
+            if(pawn.equalsPawn(Pawn.BLACK) &&
+            !state.getPawn(x, upSide).equalsPawn(pawn) &&
+            (state.getPawn(x, upSide-1).equalsPawn(Pawn.THRONE) || StateUtils.isIn(x, upSide-1, StateUtils.getCitadels()) )){
+                state.deletePawn(x, upSide,enemy.name() );
+            }     
+        }
+        if(leftSide-1>=0){
+            if(!state.getPawn(leftSide, y).equalsPawn(pawn) && state.getPawn(leftSide-1, y).equalsPawn(pawn)){
+                //capture left
+               state.deletePawn(leftSide, y,enemy.name() );
+
+            }   
+            if(pawn.equalsPawn(Pawn.BLACK) &&
+            !state.getPawn(leftSide, y).equalsPawn(pawn) &&
+            (state.getPawn(leftSide-1, y).equalsPawn(Pawn.THRONE) || StateUtils.isIn(leftSide-1, y, StateUtils.getCitadels()) )){
+                state.deletePawn(leftSide, y,enemy.name() );
+            } 
+        }
+        if(rightSide+1<9){
+            if(!state.getPawn(rightSide, y).equalsPawn(pawn) && state.getPawn(rightSide+1, y).equalsPawn(pawn)){
+                //capture right
+               state.deletePawn(rightSide, y,enemy.name() );
+
+            }    
+            if(pawn.equalsPawn(Pawn.BLACK) &&
+            !state.getPawn(rightSide, y).equalsPawn(pawn) &&
+            (state.getPawn(rightSide+1, y).equalsPawn(Pawn.THRONE) || StateUtils.isIn(rightSide+1, y, StateUtils.getCitadels()) )){
+                state.deletePawn(rightSide, y,enemy.name() );
+            }
+        }
+    
+        
     }
 
     
