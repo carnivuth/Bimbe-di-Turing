@@ -1,5 +1,6 @@
 package it.unibo.ai.didattica.competition.tablut.AI;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,9 +42,11 @@ public class MinMax {
 
         System.out.println("DepthLimit: " + this.currDepthLimit);
         long startTime = System.currentTimeMillis();
+        long endTime = System.currentTimeMillis();
         double bestValue = Double.NEGATIVE_INFINITY;
         double alpha = Double.NEGATIVE_INFINITY;
         double beta = Double.POSITIVE_INFINITY;
+        List<Action> bestActions = new ArrayList<>();
         // System.out.println(currentState.toString());
 
         possibleActions = myExpansion.actions(currentState, StateUtils.getPawns(currentState, "B"),
@@ -54,20 +57,33 @@ public class MinMax {
             StateTablut newState = myExpansion.result(new BimbeState(currentState), a);
             double value = minValue(newState, alpha, beta, 0);
             System.out.println("Value ritornato: " + value);
-            if (value > bestValue) {
+            if (value >= bestValue) {
+                if (value == bestValue) {
+                    bestActions.add(a);
+                }
+                bestActions.clear();
+                bestActions.add(a);
+
                 bestValue = value;
                 resultAction = a;
             }
+            endTime = System.currentTimeMillis();
+            if ((endTime - startTime) / 1000 > 55) {
+                System.out.println("TIMEOUT------------------------");
+                break;
+            }
         }
-        long endTime = System.currentTimeMillis();
-        // System.out.println("PAWNS LISTS");
-        // System.out.println(StateUtils.printPawns(StateUtils.getPawns(currentState,
-        // "W")));
-        // System.out.println(StateUtils.printPawns(StateUtils.getPawns(currentState,
-        // "B")));
+        endTime = System.currentTimeMillis();
+
         System.out.println("----------------------");
         System.out.println("Time: " + (endTime - startTime) / 1000 + " s");
         System.out.println(currentState.boardString());
+        if (bestActions.size() > 1) {
+            resultAction = bestActions.get((int) (Math.random() * bestActions.size()));
+        } else {
+            resultAction = bestActions.get(0);
+        }
+
         System.out.println("Best value: " + bestValue);
         System.out.println("Result action: " + resultAction);
 
