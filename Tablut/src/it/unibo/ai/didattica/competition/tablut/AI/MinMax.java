@@ -1,6 +1,7 @@
 package it.unibo.ai.didattica.competition.tablut.AI;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
@@ -38,7 +39,7 @@ public class MinMax {
         double beta = Double.POSITIVE_INFINITY;
         System.out.println(currentState.toString());
 
-        possibleActions = myExpansion.actions(currentState,StateUtils.getPawns(currentState, "B"),StateUtils.getKing(currentState),StateUtils.getPawns(currentState,"W"),player.name());
+        possibleActions = myExpansion.actions(currentState,StateUtils.getPawns(currentState, "B"),StateUtils.getKing(currentState),StateUtils.getPawns(currentState,"W"),player);
 
         for (Action a : possibleActions) {
             
@@ -59,11 +60,13 @@ public class MinMax {
     }
 
     private double maxValue(StateTablut state, double alpha, double beta, int depth) {
+        List<int[]> blackPawns =StateUtils.getPawns(state, "B");
+        List<int[]> whitePawns =StateUtils.getPawns(state,"W");
         if (isTerminal(state) || depth == currDepthLimit) {
-            return evaluate(state);
+            return evaluate(state,player,blackPawns.size(),whitePawns.size());
         }
         double value = Double.NEGATIVE_INFINITY;
-        for (Action a : myExpansion.actions(state,StateUtils.getPawns(state, "B"),StateUtils.getKing(state),StateUtils.getPawns(state,"W"),player.name())) {
+        for (Action a : myExpansion.actions(state,blackPawns,StateUtils.getKing(state),whitePawns,player)) {
             StateTablut newState = myExpansion.result(state, a);
             value = Math.max(value, minValue(newState, alpha, beta, depth + 1));
             System.out.println(value);
@@ -76,11 +79,14 @@ public class MinMax {
     }
 
     private double minValue(StateTablut state, double alpha, double beta, int depth) {
+        List<int[]> blackPawns =StateUtils.getPawns(state, "B");
+        List<int[]> whitePawns =StateUtils.getPawns(state,"W");
+        
         if (isTerminal(state) || depth == currDepthLimit) {
-            return evaluate(state);
+            return evaluate(state,enemy,blackPawns.size(),whitePawns.size());
         }
         double value = Double.POSITIVE_INFINITY;
-        for (Action a : myExpansion.actions(state,StateUtils.getPawns(state, "B"),StateUtils.getKing(state),StateUtils.getPawns(state,"W"),this.enemy.name())) {
+        for (Action a : myExpansion.actions(state,blackPawns,StateUtils.getKing(state),whitePawns,this.enemy)) {
             StateTablut newState = myExpansion.result(state, a);
             value = Math.min(value, maxValue(newState, alpha, beta, depth + 1));
             System.out.println(value);
@@ -97,9 +103,9 @@ public class MinMax {
                 || state.getTurn().equals(Turn.DRAW);
     }
 
-    private double evaluate(StateTablut state) {
+    private double evaluate(StateTablut state,Turn color,int blackPawns,int whitePawns) {
 
-        return heuristic.evaluate(state);
+        return heuristic.eval(state,color,blackPawns,whitePawns);
     }
 
 }

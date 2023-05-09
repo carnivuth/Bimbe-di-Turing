@@ -1,7 +1,10 @@
 package it.unibo.ai.didattica.competition.tablut.AI;
 
+import java.util.ArrayList;
+
 import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
+import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
 public class Heuristic {
 
@@ -23,16 +26,15 @@ public class Heuristic {
         this.weights[10] = 1;
     }
 
-    public double evaluate(StateTablut state) {
+    public double eval(StateTablut state,Turn color, int blackPawns,int whitePawns) {
 
-        // get white and black pawns
-        int w = state.getNumberOf(StateTablut.Pawn.WHITE);
-        int b = state.getNumberOf(StateTablut.Pawn.BLACK);
+        // get white and black pawns 
+        // retrive values from list instead 
         int[] king_pos = StateUtils.getKing(state);
 
-        double val = (weights[7] * (weights[9] * w - weights[10] * b) + weights[8] * evalKingPos(state, king_pos));
+        double val = (weights[7] * (weights[9] * whitePawns - weights[10] * blackPawns) + weights[8] * evalKingPos(state, king_pos));
 
-        return val;
+        return (color.equalsTurn("W"))?val:-val;
     }
 
     public int evalKingPos(StateTablut state, int[] king_pos) {
