@@ -26,7 +26,7 @@ public class HeuristicFrittoMisto implements Heuristic {
 
     private int[] castle;
     private int[][] citadels;
-    private int[][] winPos;
+    private int[][] escapes;
     private static int[] weight;
 
     /*** color ***/
@@ -38,13 +38,13 @@ public class HeuristicFrittoMisto implements Heuristic {
     public HeuristicFrittoMisto() {
         this.color = 0;
         this.playerColor = State.Turn.WHITE;
-        this.winPos = StateUtils.getEscapes();
+        this.escapes = StateUtils.getEscapes();
         initWeights();
     }
 
     public HeuristicFrittoMisto(StateTablut state) {
         this.playerColor = state.getTurn();
-        this.winPos = StateUtils.getEscapes();
+        this.escapes = StateUtils.getEscapes();
         this.color = ((playerColor == State.Turn.WHITE || playerColor == State.Turn.WHITEWIN) ? 1 : -1);
 
         initWeights();
@@ -84,11 +84,11 @@ public class HeuristicFrittoMisto implements Heuristic {
         int[] king = StateUtils.getKing(state);
 
         double V = weight[KING_MANHATTAN] * kingManhattan(king) +
-                weight[KING_CAPTURED_SIDES] * kingCapture(king, blackPieces) +
+                // weight[KING_CAPTURED_SIDES] * kingCapture(king, blackPieces) +
                 // weight[PAWNS_DIFFERENCE] * lostPaws(blackPieces, whitePieces,
                 // state.getTurn()) +
                 weight[PAWNS_WHITE] * whitePieces.size() +
-                weight[VICTORY_PATH] * victoryPaths(king, blackPieces, whitePieces) +
+                // weight[VICTORY_PATH] * victoryPaths(king, blackPieces, whitePieces) +
                 // weight[VICTORY] * winCondition(state.getTurn()) +
                 weight[PAWNS_BLACK] * blackPieces.size();
 
@@ -101,12 +101,12 @@ public class HeuristicFrittoMisto implements Heuristic {
     /**
      * WEIGHT 0
      * finds the minimum distance between the king object and the objects in the
-     * winPos
-     * assuming that '6' is the maximum distance from the winPos
+     * escapes
+     * assuming that '6' is the maximum distance from the escapes
      **/
     public double kingManhattan(int[] king) {
         double minDistance = 6;
-        for (int[] escape : winPos) {
+        for (int[] escape : escapes) {
             double distance = Math.abs(king[0] - escape[0]) + Math.abs(king[1] - escape[1]);
             if (distance < minDistance) {
                 minDistance = distance;
