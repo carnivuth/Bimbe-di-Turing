@@ -16,21 +16,27 @@ public class Expansion {
 
     
 
-    public Set<Action> actions(StateTablut state,List<int []> blackPawns,int[] king,List<int []> whitePawns,Turn color) {
+    public Set<Action> actions(BimbeState state) {
         Set<Action> result=new HashSet<>();
+        int[] king=state.getKing();
      
             //get moves
-            if(color.equalsTurn("W")){
-                result.addAll(getPossibleMovements(state.getPawn(king[0],king[1] ),king[0],king[1], state,color));
+           // System.out.println(state.getTurn().equalsTurn("W"));
+            //System.out.println(state.getTurn().toString());
+
+            if(state.getTurn().equalsTurn("W")){
+                result.addAll(getPossibleMovements(state.getPawn(king[0],king[1] ),king[0],king[1], state,state.getTurn()));
                
-                for (int[] coordinates : whitePawns) {
-                    result.addAll(getPossibleMovements(state.getPawn(coordinates[0],coordinates[1] ),coordinates[0],coordinates[1], state,color));
+                for (int[] coordinates : state.getPawns(Pawn.WHITE)) {
+                     System.out.println("x: " +coordinates[0]+"y: "+coordinates[1]);
+
+                    result.addAll(getPossibleMovements(state.getPawn(coordinates[0],coordinates[1] ),coordinates[0],coordinates[1], state,state.getTurn()));
                 }
             
             }else{
               
-                for (int[] coordinates : blackPawns) {
-                    result.addAll(getPossibleMovements(state.getPawn(coordinates[0],coordinates[1] ),coordinates[0],coordinates[1], state,color));
+                for (int[] coordinates : state.getPawns(Pawn.BLACK)) {
+                    result.addAll(getPossibleMovements(state.getPawn(coordinates[0],coordinates[1] ),coordinates[0],coordinates[1], state,state.getTurn()));
                 }
             }
         
@@ -162,13 +168,17 @@ public class Expansion {
         
         //clone state
         BimbeState result=state.clone();
+        int[] king=result.getKing();
         
-        /*System.out.println("old state");
-        System.out.println(state.boardString());
-        
-        System.out.println("new state");
-        System.out.println(result.boardString());*/
-        result.setTurn((result.getTurn().equalsTurn("B"))?Turn.WHITE:Turn.BLACK);
+        if(StateUtils.isIn(king[0],king[1],StateUtils.escapes)){
+            result.setTurn(Turn.WHITEWIN);
+        }
+        if(result.kingIsCaptured()==4)
+        {
+            result.setTurn(Turn.BLACKWIN);
+        }else{
+            result.setTurn((result.getTurn().equalsTurn("B"))?Turn.WHITE:Turn.BLACK);
+        }
         //get future state
         int x= action.getRowFrom();
         int y= action.getColumnFrom();
