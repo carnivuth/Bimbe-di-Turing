@@ -12,20 +12,21 @@ public class BimbeState extends StateTablut{
    
     public BimbeState(State state){
         this.board=state.getBoard();
-        blackPawns=initPawns(state,"B");
-        whitePawns=initPawns(state,"W");
+        blackPawns=initPawns(state,Pawn.BLACK);
+        whitePawns=initPawns(state,Pawn.WHITE);
+        this.setTurn(state.getTurn());
 
     }
-    public BimbeState(State state,List<int []> blackPawns,List<int []> whitePawns){
-        super.clone();
-        this.blackPawns=new ArrayList<>(blackPawns);
-        this.whitePawns=new ArrayList<>(blackPawns);
+    public BimbeState(){
 
     }
-    public List<int[]> getPawns(String color){
-        return (color.equals("W"))?whitePawns:blackPawns;
+ 
+
+    public List<int[]> getPawns(Pawn color){
+        return (color.equalsPawn(Pawn.WHITE))?this.whitePawns:this.blackPawns;
     }
-    public  List<int[]> initPawns(State state, String color) {
+
+    public  List<int[]> initPawns(State state, Pawn color) {
         int[] coordinates;
         List<int[]> result = new ArrayList<int[]>();
         for (int i = 0; i < state.getBoard().length; i++) {
@@ -42,26 +43,96 @@ public class BimbeState extends StateTablut{
         }
         return result;
     }
+
     public BimbeState clone(){
-        BimbeState result =new BimbeState(this,this.blackPawns,this.whitePawns);
-        return result;
+
+        BimbeState result = new BimbeState();
+
+		Pawn oldboard[][] = this.getBoard();
+		Pawn newboard[][] = result.getBoard();
+
+		for (int i = 0; i < this.board.length; i++) {
+			for (int j = 0; j < this.board[i].length; j++) {
+				newboard[i][j] = oldboard[i][j];
+			}
+		}
+
+		result.setBoard(newboard);
+		result.setTurn(this.turn);
+        result.blackPawns=new ArrayList<>(this.blackPawns);
+        result.whitePawns=new ArrayList<>(this.whitePawns);
+		return result;
     }
+
     public void deletePawn(int x, int y,Pawn color){
-        this.board[x][y]=Pawn.EMPTY;
+
         if(color.equalsPawn(Pawn.WHITE)){
             for (int i =0; i<this.whitePawns.size();i++){
                 if (whitePawns.get(i)[0]==x &&whitePawns.get(i)[1]==y){
                     whitePawns.remove(i);
+                    this.board[x][y]=Pawn.EMPTY;
                     return;
                 }
             }
-        }else{
+        }else {
             for (int i =0; i<this.blackPawns.size();i++){
                 if (blackPawns.get(i)[0]==x &&blackPawns.get(i)[1]==y){
                     blackPawns.remove(i);
+                    this.board[x][y]=Pawn.EMPTY;
                     return;
                 }
             }
         }
+    }
+    public  int[] getKing() {
+
+        int[] result = new int[2];
+        for (int i = 0; i < this.getBoard().length; i++) {
+            for (int j = 0; j < this.getBoard().length; j++) {
+                if (this.getPawn(i, j).equalsPawn("K")) {
+
+                    result[0] = i;
+                    result[1] = j;
+                    return result;
+                }
+
+            }
+        }
+        return result;
+    }
+    public boolean isBlackPiece(int x, int y) {
+        for (int[] is : this.blackPawns) {
+            if (is[0] == x && is[1] == y)
+                return true;
+        }
+        return false;
+    }
+    public double kingIsCaptured() {
+        double count = 0;
+        int[] king= getKing();
+        int x = king[0];
+        int y = king[1] + 1;
+
+        if (this.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels)  ||(x==4 && y==4 )) {
+            count++;
+        }
+        x = king[0];
+        y = king[1] - 1;
+        if (this.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x==4 && y==4 )) {
+            count++;
+        }
+        x = king[0] + 1;
+        y = king[1];
+        if (this.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x==4 && y==4 )) {
+            count++;
+        }
+        x = king[0] - 1;
+        y = king[1];
+        if (this.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x==4 && y==4 )) {
+            count++;
+        }
+
+
+        return count;
     }
 }
