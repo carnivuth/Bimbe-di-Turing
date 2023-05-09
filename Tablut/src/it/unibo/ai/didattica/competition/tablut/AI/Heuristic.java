@@ -4,10 +4,10 @@ import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 
 /**
  *
- * @author 
+ * @author E.Cerulo, V.M.Stanzione
  *
  */
 
 public interface Heuristic {
-    double evaluate(StateTablut state);
+    double evaluate(StateTablut state );
 }

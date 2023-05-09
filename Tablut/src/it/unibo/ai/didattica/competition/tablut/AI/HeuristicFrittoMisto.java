@@ -36,8 +36,6 @@ public class HeuristicFrittoMisto implements Heuristic {
     /**************** WIN ***********************/
 
     public HeuristicFrittoMisto(StateTablut state) {
-        this.initialBlack = state.getNumberOf(State.Pawn.BLACK);
-        this.initialWhite = state.getNumberOf(State.Pawn.WHITE);
         this.playerColor = state.getTurn();
 
         this.color = ((playerColor == State.Turn.WHITE || playerColor == State.Turn.WHITEWIN) ? 1 : -1);
@@ -75,6 +73,7 @@ public class HeuristicFrittoMisto implements Heuristic {
     }
 
     /********************* eval ********************************/
+    @Override
     public double evaluate(StateTablut state) {
 
         // double color = ((playerColor == State.Turn.WHITE || playerColor ==
