@@ -1,7 +1,6 @@
 package it.unibo.ai.didattica.competition.tablut.AI;
 
 import it.unibo.ai.didattica.competition.tablut.domain.State;
-import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 
 import java.util.List;
@@ -29,25 +28,16 @@ public class HeuristicFrittoMisto implements Heuristic {
     private static int[] weight;
     private Pawn[][] board;
 
-    /*** color ***/
-    private final State.Turn playerColor; // il colore del client
-    private final double color;
-
     /**************** WIN ***********************/
 
     public HeuristicFrittoMisto(Pawn[][] board) {
-        this.color = 0;
-        this.playerColor = State.Turn.WHITE;
+        // this.color = 0;
+        // this.playerColor = State.Turn.WHITE;
         this.escapes = StateUtils.getEscapes();
         initWeights();
     }
 
-    public HeuristicFrittoMisto(StateTablut state) {
-        this.board = state.getBoard();
-        this.playerColor = state.getTurn();
-        this.escapes = StateUtils.getEscapes();
-        this.color = ((playerColor == State.Turn.WHITE || playerColor == State.Turn.WHITEWIN) ? 1 : -1);
-
+    public HeuristicFrittoMisto() {
         initWeights();
     }
 
@@ -72,10 +62,10 @@ public class HeuristicFrittoMisto implements Heuristic {
 
     /********************* eval ********************************/
     @Override
-    public double evaluate(StateTablut state) {
+    public double evaluate(BimbeState state) {
 
         // get turn color
-        double color = ((playerColor == State.Turn.WHITE || playerColor == State.Turn.WHITEWIN) ? 1 : -1);
+        double color = ((state.getTurn() == State.Turn.WHITE || state.getTurn() == State.Turn.WHITEWIN) ? 1 : -1);
 
         // pawns
         // Pawn[][] pieces = state.getBoard();

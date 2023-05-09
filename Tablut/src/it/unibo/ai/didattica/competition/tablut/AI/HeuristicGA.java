@@ -27,7 +27,7 @@ public class HeuristicGA implements Heuristic {
     }
 
     @Override
-    public double evaluate(StateTablut state) {
+    public double evaluate(BimbeState state) {
         // // get white and black pawns
         // Turn color= state.getTurn();
         // int blackPawns = StateUtils.getPawns(state, Pawn.BLACK.toString()).size();
