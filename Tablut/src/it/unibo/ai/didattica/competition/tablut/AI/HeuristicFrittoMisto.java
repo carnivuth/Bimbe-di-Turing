@@ -22,22 +22,16 @@ public class HeuristicFrittoMisto implements Heuristic {
     public static final int VICTORY = 5;
     public static final int VICTORY_PATH = 4;
 
-    private int[] castle;
-    private int[][] citadels;
     private int[][] escapes;
     private static int[] weight;
-    private Pawn[][] board;
 
     /**************** WIN ***********************/
 
-    public HeuristicFrittoMisto(Pawn[][] board) {
-        // this.color = 0;
-        // this.playerColor = State.Turn.WHITE;
-        this.escapes = StateUtils.getEscapes();
-        initWeights();
-    }
+
 
     public HeuristicFrittoMisto() {
+        this.escapes = StateUtils.getEscapes();
+
         initWeights();
     }
 
@@ -70,12 +64,12 @@ public class HeuristicFrittoMisto implements Heuristic {
         // pawns
         // Pawn[][] pieces = state.getBoard();
 
-        List<int[]> blackPieces = StateUtils.getPawns(state, Pawn.BLACK.toString());
-        List<int[]> whitePieces = StateUtils.getPawns(state, Pawn.WHITE.toString());
-        int[] king = StateUtils.getKing(state);
+        List<int[]> blackPieces = state.getPawns(Pawn.BLACK);
+        List<int[]> whitePieces = state.getPawns(Pawn.WHITE);
+        int[] king = state.getKing();
 
         double V = weight[KING_MANHATTAN] * kingManhattan(king) +
-        weight[KING_CAPTURED_SIDES] * kingCapture(king, blackPieces) +
+        weight[KING_CAPTURED_SIDES] * kingCapture(king, state) +
         // weight[PAWNS_DIFFERENCE] * lostPaws(blackPieces, whitePieces,
         // state.getTurn()) +
                 weight[PAWNS_WHITE] * whitePieces.size() +
@@ -110,68 +104,50 @@ public class HeuristicFrittoMisto implements Heuristic {
      * WEIGHT 1
      * finds the number of black pieces or walls that are close to the king
      **/
-    public double kingCapture(int[] king, List<int[]> blackPieces) {
+    public double kingCapture(int[] king, BimbeState state) {
         double count = 0;
         int x = king[0];
         int y = king[1] + 1;
 
-        if (isBlackPiece(blackPieces, x, y) || isCitadel(blackPieces, x, y)  ||isCastle(castle, x, y)) {
+        if (state.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels)  ||(x==4 && y==4 )) {
             count++;
         }
         x = king[0];
         y = king[1] - 1;
-        if (isBlackPiece(blackPieces, x, y) || isCitadel(blackPieces, x, y) || isCastle(castle, x, y)) {
+        if (state.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x==4 && y==4 )) {
             count++;
         }
         x = king[0] + 1;
         y = king[1];
-        if (isBlackPiece(blackPieces, x, y) || isCitadel(blackPieces, x, y) || isCastle(castle, x, y)) {
+        if (state.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x==4 && y==4 )) {
             count++;
         }
         x = king[0] - 1;
         y = king[1];
-        if (isBlackPiece(blackPieces, x, y) || isCitadel(blackPieces, x, y) || isCastle(castle, x, y)) {
+        if (state.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x==4 && y==4 )) {
             count++;
         }
 
-        System.out.println("king capture - castls + blacks + citadels: " + count);
+        //System.out.println("king capture - castls + blacks + citadels: " + count);
 
         return count;
     }
 
-    private boolean isBlackPiece(List<int[]> blackPieces, int x, int y) {
-        for (int[] is : blackPieces) {
-            if (is[0] == x && is[1] == y)
-                return true;
-        }
-        return false;
-    }
+    
 
-    private boolean isCitadel(List<int[]> citadels, int x, int y) {
-        for (int[] is : citadels) {
-            if (is[0] == x && is[1] == y)
-                return true;
-        }
-        return false;
-    }
 
-    private boolean isCastle(int[] castle, int x, int y) {
-        if (castle[0] == x && castle[1] == y)
-            return true;
-        return false;
-    }
 
     /**
      * WEIGHT 2
      * finds the difference between the initial number of pawns and the current
      * number of pawns
      **/
-    private double lostPaws(List<int[]> black, List<int[]> white, State.Turn turn) {
+   /*  private double lostPaws(List<int[]> black, List<int[]> white, State.Turn turn) {
         // double coeff = 16/9; //per equilibrare la situazione di pezzi
         // return - (coeff)*(initialWhite - white.size()) + (initialBlack -
         // black.size());
         return 0;
-    }
+    }*/
 
     /** 3 **/
     // pezzi bianchi
