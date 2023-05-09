@@ -6,7 +6,6 @@ import java.net.UnknownHostException;
 import it.unibo.ai.didattica.competition.tablut.client.TablutClient;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
-import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
 public class MyTablutClient extends TablutClient {
@@ -38,7 +37,7 @@ public class MyTablutClient extends TablutClient {
     // Qui ci sono i metodi astratti di TablutClient
     @Override
     public void run() {
-        MinMax minmax = new MinMax(3, this.getPlayer());
+        MinMax minmax = new MinMax(2, this.getPlayer());
         try {
             this.declareName();
         } catch (Exception e) {
@@ -48,14 +47,12 @@ public class MyTablutClient extends TablutClient {
             try {
                 clientRoutine(minmax, Turn.WHITE);
             } catch (ClassNotFoundException | IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         } else {
             try {
                 clientRoutine(minmax, Turn.BLACK);
             } catch (ClassNotFoundException | IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -69,7 +66,7 @@ public class MyTablutClient extends TablutClient {
             this.read();
             if (this.getCurrentState().getTurn().equals(myTurn)) {
 
-                action = minmax.minmaxDecision((StateTablut) this.getCurrentState());
+                action = minmax.minmaxDecision( new BimbeState(this.getCurrentState()));
                 this.write(action);
             } else {
                 System.out.println("Waiting for the opponent move...");
