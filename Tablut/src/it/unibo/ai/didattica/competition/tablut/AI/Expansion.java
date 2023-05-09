@@ -170,8 +170,8 @@ public class Expansion {
         
         result.getBoard()[toX][toY]=result.getPawn(x, y);
         result.getBoard()[x][y]=Pawn.EMPTY;
-        //check for rules integrity
-
+        //TODO check for captured pawns and update lists
+        
         //return new state
         return result;
     }
