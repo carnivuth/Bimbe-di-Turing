@@ -85,11 +85,11 @@ public class HeuristicFrittoMisto implements Heuristic {
         int[] king = StateUtils.getKing(state);
 
         double V = weight[KING_MANHATTAN] * kingManhattan(king) +
-        // weight[KING_CAPTURED_SIDES] * kingCapture(king, blackPieces) +
+        weight[KING_CAPTURED_SIDES] * kingCapture(king, blackPieces) +
         // weight[PAWNS_DIFFERENCE] * lostPaws(blackPieces, whitePieces,
         // state.getTurn()) +
                 weight[PAWNS_WHITE] * whitePieces.size() +
-                // weight[VICTORY_PATH] * victoryPaths(king, blackPieces, whitePieces) +
+                weight[VICTORY_PATH] * victoryPaths(king, blackPieces, whitePieces) +
                 // weight[VICTORY] * winCondition(state.getTurn()) +
                 weight[PAWNS_BLACK] * blackPieces.size();
 
