@@ -58,14 +58,6 @@ public class HeuristicBimbe implements Heuristic {
     public double evaluate(BimbeState state) {
 
         // get turn color
-        if(state.getTurn().equalsTurn("WW")){
-            return Double.POSITIVE_INFINITY;
-        }
-
-        if(state.getTurn().equalsTurn("BW")){
-            return Double.NEGATIVE_INFINITY;
-        }
-      
         double color = ((state.getTurn().equalsTurn("W") || state.getTurn().equalsTurn("WW")) ? 1 : -1);
 
         // pawns
