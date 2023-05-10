@@ -168,8 +168,7 @@ public class Expansion {
         
         if(StateUtils.isIn(king[0],king[1],StateUtils.escapes)){
             result.setTurn(Turn.WHITEWIN);
-        }
-        if(result.kingIsCaptured()==4)
+        }else if(result.kingIsCaptured()==1)
         {
             result.setTurn(Turn.BLACKWIN);
         }else{
