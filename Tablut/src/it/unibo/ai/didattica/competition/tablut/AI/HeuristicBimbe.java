@@ -47,7 +47,7 @@ public class HeuristicBimbe implements Heuristic {
 
         // POST GENETIC
         weight[KING_MANHATTAN] = 300; // manhattan
-        weight[KING_CAPTURED_SIDES] = -147; // king capture
+        weight[KING_CAPTURED_SIDES] = -5000; // king capture
         weight[PAWNS_DIFFERENCE] = -22; // lost pawns
         weight[PAWNS_WHITE] = 250; // white pieces (difference ?)
         weight[VICTORY_PATH] = 195; // victory path
@@ -70,7 +70,7 @@ public class HeuristicBimbe implements Heuristic {
         int[] king = state.getKing();
 
         double V = weight[KING_MANHATTAN] * kingManhattan(king) +
-        weight[KING_CAPTURED_SIDES] * kingCapture(king, state) +
+        //weight[KING_CAPTURED_SIDES] * kingCapture(king, state) +
         // weight[PAWNS_DIFFERENCE] * lostPaws(blackPieces, whitePieces,
         // state.getTurn()) +
                 weight[PAWNS_WHITE] * whitePieces.size() +
@@ -85,6 +85,8 @@ public class HeuristicBimbe implements Heuristic {
 
     private double winCondition(Turn turn) {
         if(turn.equalsTurn("WW"))return 10;
+        if(turn.equalsTurn("BW"))return -10;
+
         else return 0;
     }
 
