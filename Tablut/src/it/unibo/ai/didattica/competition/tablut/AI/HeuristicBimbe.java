@@ -63,7 +63,7 @@ public class HeuristicBimbe implements Heuristic {
 
         double V = weight[KING_MANHATTAN] * kingManhattan(king) +
                 weight[PAWNS_WHITE] * whitePieces.size() +
-                // weight[VICTORY_PATH] * victoryPaths(king, blackPieces, whitePieces) +
+                weight[VICTORY_PATH] * victoryPaths(king, blackPieces, whitePieces) +
                 weight[VICTORY] * winCondition(state.getTurn()) +
                 weight[PAWNS_BLACK] * blackPieces.size();
         // weight[KING_CAPTURED_SIDES] * kingCapture(king, state) +
@@ -194,7 +194,6 @@ public class HeuristicBimbe implements Heuristic {
             return 1;
         if (turn.equalsTurn("BW"))
             return -1;
-        else
             return 0;
     }
 
