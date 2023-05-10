@@ -113,6 +113,7 @@ public class BimbeState extends StateTablut{
         int x = king[0];
         int y = king[1] + 1;
 
+        //special cases for king
         if (this.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels)  ||(x==4 && y==4 )) {
             count++;
         }
@@ -131,8 +132,13 @@ public class BimbeState extends StateTablut{
         if (this.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x==4 && y==4 )) {
             count++;
         }
+        if (count==4)return 1;
+        
+        //check for normal captures
+        if(king[0]-1<9 &&king[0]+1<9 && this.isBlackPiece(king[0]-1, king[1]) && this.isBlackPiece(king[0]+1, king[1])) return 1;
+        if(king[1]-1<9 &&king[1]+1<9 && this.isBlackPiece(king[0], king[1]-1) && this.isBlackPiece(king[0], king[1]+1)) return 1;
+        
 
-
-        return count;
+        return 0;
     }
 }
