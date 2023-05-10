@@ -1,6 +1,5 @@
 package it.unibo.ai.didattica.competition.tablut.AI;
 
-import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.List;
  *
  */
 
-public class HeuristicFrittoMisto implements Heuristic {
+public class HeuristicBimbe implements Heuristic {
 
     /*** cost ***/
     public static final int KING_MANHATTAN = 0;
@@ -29,14 +28,14 @@ public class HeuristicFrittoMisto implements Heuristic {
 
 
 
-    public HeuristicFrittoMisto() {
+    public HeuristicBimbe() {
         this.escapes = StateUtils.getEscapes();
 
         initWeights();
     }
 
     public static void setWeight(int[] weight) {
-        HeuristicFrittoMisto.weight = weight;
+        HeuristicBimbe.weight = weight;
     }
 
     private void initWeights() {
@@ -59,6 +58,13 @@ public class HeuristicFrittoMisto implements Heuristic {
     public double evaluate(BimbeState state) {
 
         // get turn color
+        if(state.getTurn().equalsTurn("WW")){
+            return Double.POSITIVE_INFINITY;
+        }
+
+        if(state.getTurn().equalsTurn("BW")){
+            return Double.NEGATIVE_INFINITY;
+        }
       
         double color = ((state.getTurn().equalsTurn("W") || state.getTurn().equalsTurn("WW")) ? 1 : -1);
 

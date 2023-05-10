@@ -76,7 +76,7 @@ public class MockMain {
 
         // instanziate class
 
-        HeuristicFrittoMisto h = new HeuristicFrittoMisto(board);
+        HeuristicBimbe h = new HeuristicBimbe();
 
         // get black pawns
         List<int[]> blackPawns = getPawns(board, "B");

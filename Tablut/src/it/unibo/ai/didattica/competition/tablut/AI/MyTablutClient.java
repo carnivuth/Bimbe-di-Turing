@@ -37,7 +37,7 @@ public class MyTablutClient extends TablutClient {
     // Qui ci sono i metodi astratti di TablutClient
     @Override
     public void run() {
-        MinMax minmax = new MinMax(2, this.getPlayer());
+        MinMax minmax = new MinMax(3, this.getPlayer());
         try {
             this.declareName();
         } catch (Exception e) {
