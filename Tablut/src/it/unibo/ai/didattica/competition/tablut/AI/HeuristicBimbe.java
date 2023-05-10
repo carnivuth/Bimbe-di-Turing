@@ -44,12 +44,12 @@ public class HeuristicBimbe implements Heuristic {
         // double pawnsCoef = (initialBlack) / initialWhite; //(16.0/9.0)
 
         // POST GENETIC
-        weight[KING_MANHATTAN] = 300; // manhattan
-        weight[KING_CAPTURED_SIDES] = -5000; // king capture
+        weight[KING_MANHATTAN] = 42; // manhattan
+        weight[KING_CAPTURED_SIDES] = -147; // king capture
         weight[PAWNS_DIFFERENCE] = -22; // lost pawns
         weight[PAWNS_WHITE] = 250; // white pieces (difference ?)
         weight[VICTORY_PATH] = 195; // victory path
-        weight[VICTORY] = 50000; // victory
+        weight[VICTORY] = 5000; // victory
         weight[PAWNS_BLACK] = -164; // black pieces
     }
 
