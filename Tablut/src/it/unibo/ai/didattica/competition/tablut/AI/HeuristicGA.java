@@ -4,7 +4,6 @@ import java.util.Random;
 
 import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
-import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
 public class HeuristicGA implements Heuristic {
 
