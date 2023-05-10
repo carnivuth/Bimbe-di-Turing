@@ -20,14 +20,10 @@ public class Expansion {
         int[] king=state.getKing();
      
             //get moves
-           // System.out.println(state.getTurn().equalsTurn("W"));
-            //System.out.println(state.getTurn().toString());
-
             if(state.getTurn().equalsTurn("W")){
                 result.addAll(getPossibleMovements(state.getPawn(king[0],king[1] ),king[0],king[1], state,state.getTurn()));
                
                 for (int[] coordinates : state.getPawns(Pawn.WHITE)) {
-                     System.out.println("x: " +coordinates[0]+"y: "+coordinates[1]);
 
                     result.addAll(getPossibleMovements(Pawn.WHITE,coordinates[0],coordinates[1], state,state.getTurn()));
                 }
