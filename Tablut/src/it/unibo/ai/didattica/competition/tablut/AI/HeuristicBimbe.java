@@ -28,11 +28,9 @@ public class HeuristicBimbe implements Heuristic {
 
     /**************** WIN ***********************/
 
-
-
     public HeuristicBimbe(Turn color) {
         this.escapes = StateUtils.getEscapes();
-        this.color = (color.equalsTurn("W") ||color.equalsTurn("WW")) ? 1 : -1;
+        this.color = (color.equalsTurn("W") || color.equalsTurn("WW")) ? 1 : -1;
         initWeights();
     }
 
@@ -51,7 +49,7 @@ public class HeuristicBimbe implements Heuristic {
         weight[PAWNS_DIFFERENCE] = -22; // lost pawns
         weight[PAWNS_WHITE] = 250; // white pieces (difference ?)
         weight[VICTORY_PATH] = 195; // victory path
-        weight[VICTORY] = 5000; // victory
+        weight[VICTORY] = 50000; // victory
         weight[PAWNS_BLACK] = -164; // black pieces
     }
 
@@ -59,36 +57,23 @@ public class HeuristicBimbe implements Heuristic {
     @Override
     public double evaluate(BimbeState state) {
 
-        // get turn color
-        
-
-        // pawns
-        // Pawn[][] pieces = state.getBoard();
-
         List<int[]> blackPieces = state.getPawns(Pawn.BLACK);
         List<int[]> whitePieces = state.getPawns(Pawn.WHITE);
         int[] king = state.getKing();
 
         double V = weight[KING_MANHATTAN] * kingManhattan(king) +
-        //weight[KING_CAPTURED_SIDES] * kingCapture(king, state) +
-        // weight[PAWNS_DIFFERENCE] * lostPaws(blackPieces, whitePieces,
-        // state.getTurn()) +
                 weight[PAWNS_WHITE] * whitePieces.size() +
-                //weight[VICTORY_PATH] * victoryPaths(king, blackPieces, whitePieces) +
+                // weight[VICTORY_PATH] * victoryPaths(king, blackPieces, whitePieces) +
                 weight[VICTORY] * winCondition(state.getTurn()) +
                 weight[PAWNS_BLACK] * blackPieces.size();
+        // weight[KING_CAPTURED_SIDES] * kingCapture(king, state) +
+        // weight[PAWNS_DIFFERENCE] * lostPaws(blackPieces, whitePieces,
+        // state.getTurn()) +
 
         return V * color;
     }
 
     /******************************************************/
-
-    private double winCondition(Turn turn) {
-        if(turn.equalsTurn("WW"))return 10;
-        if(turn.equalsTurn("BW"))return -10;
-
-        else return 0;
-    }
 
     /********************** FUNC *************************/
     /**
@@ -117,56 +102,55 @@ public class HeuristicBimbe implements Heuristic {
         int x = king[0];
         int y = king[1] + 1;
 
-        if (state.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels)  ||(x==4 && y==4 )) {
+        if (state.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x == 4 && y == 4)) {
             count++;
         }
         x = king[0];
         y = king[1] - 1;
-        if (state.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x==4 && y==4 )) {
+        if (state.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x == 4 && y == 4)) {
             count++;
         }
         x = king[0] + 1;
         y = king[1];
-        if (state.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x==4 && y==4 )) {
+        if (state.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x == 4 && y == 4)) {
             count++;
         }
         x = king[0] - 1;
         y = king[1];
-        if (state.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x==4 && y==4 )) {
+        if (state.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x == 4 && y == 4)) {
             count++;
         }
 
-        //System.out.println("king capture - castls + blacks + citadels: " + count);
+        // System.out.println("king capture - castls + blacks + citadels: " + count);
 
         return count;
     }
-
-    
-
-
 
     /**
      * WEIGHT 2
      * finds the difference between the initial number of pawns and the current
      * number of pawns
      **/
-   /*  private double lostPaws(List<int[]> black, List<int[]> white, State.Turn turn) {
-        // double coeff = 16/9; //per equilibrare la situazione di pezzi
-        // return - (coeff)*(initialWhite - white.size()) + (initialBlack -
-        // black.size());
-        return 0;
-    }*/
+    /*
+     * private double lostPaws(List<int[]> black, List<int[]> white, State.Turn
+     * turn) {
+     * // double coeff = 16/9; //per equilibrare la situazione di pezzi
+     * // return - (coeff)*(initialWhite - white.size()) + (initialBlack -
+     * // black.size());
+     * return 0;
+     * }
+     */
 
-    /** 3 **/
+    /** WEIGHT 3 **/
     // pezzi bianchi
 
     /**
      * WEIGHT 4
-     * finds the number of open paths to victory for the king
+     * finds the number of open paths to victory for the king (king between two escapes)
      **/
     public int victoryPaths(int[] king, List<int[]> blackPieces, List<int[]> whitePieces) {
         int piecesInTheRow = 0;
-        int piecesInTheCol =0;
+        int piecesInTheCol = 0;
 
         // check if king is in the same row or column of an escape
         if (!StateUtils.isIn(king[0], king[1], StateUtils.possibleOpenPaths))
@@ -174,43 +158,45 @@ public class HeuristicBimbe implements Heuristic {
         else {
             // check if there is a black piece in the same row or column of king
             for (int[] black : blackPieces) {
-                if (black[0] == king[0] ) {
+                if (black[0] == king[0]) {
                     piecesInTheRow++;
                 }
-                if(black[1] == king[1]){
+                if (black[1] == king[1]) {
                     piecesInTheCol++;
                 }
             }
             // check if there is a white piece in the same row or column of king
             for (int[] white : whitePieces) {
                 if (white[0] == king[0] || white[1] == king[1]) {
-                    if (white[0] == king[0] ) {
+                    if (white[0] == king[0]) {
                         piecesInTheRow++;
                     }
-                    if(white[1] == king[1]){
-                        if(piecesInTheRow!=0) return 0;
+                    if (white[1] == king[1]) {
+                        if (piecesInTheRow != 0)
+                            return 0;
                         piecesInTheCol++;
                     }
                 }
             }
         }
-        if(piecesInTheRow!=0 || piecesInTheCol!=0) {
+        if (piecesInTheRow != 0 || piecesInTheCol != 0) {
             return 1;
-        } 
-        else return 0;
+        } else
+            return 0;
 
     }
 
-    /*** 5 ***/
-    // vittoria o sconfitta
-    // private double winCondition(State.Turn turn, int depth) {
-    // if (turn == State.Turn.WHITEWIN)
-    // return 1.0 * depthBonus(depth);
-    // if (turn == State.Turn.BLACKWIN)
-    // return -1.0 * depthBonus(depth);
-
-    // return 0;
-    // }
+    /*** WEIGHT 5 
+     * when the king is in an escape room, the board is white winning
+     * ***/
+    private double winCondition(Turn turn) {
+        if (turn.equalsTurn("WW"))
+            return 1;
+        if (turn.equalsTurn("BW"))
+            return -1;
+        else
+            return 0;
+    }
 
     // // bonus su distanza da root
     // private double depthBonus(int depth) {
@@ -218,7 +204,7 @@ public class HeuristicBimbe implements Heuristic {
     // return (double) (depthLimit - depth) / (double) depthLimit + 1.0;
     // }
 
-    /** 6 **/
+    /** WEIGHT 6 **/
     // pezzi neri
 
     public static void printBoard(Pawn[][] board) {
