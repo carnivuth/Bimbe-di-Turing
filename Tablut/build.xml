@@ -70,8 +70,18 @@
             </classpath>
         </java>
     </target>
-        <target name="bimbe">
+        <target name="bimbewhite">
         <java classname="it.unibo.ai.didattica.competition.tablut.AI.MyTablutClient" fork="true">
+        <arg value="WHITE"/>
+            <classpath>
+                <pathelement location="lib/gson-2.2.2.jar"/>
+                <pathelement location="build"/>
+            </classpath>
+        </java>
+    </target>
+        <target name="bimbeblack">
+        <java classname="it.unibo.ai.didattica.competition.tablut.AI.MyTablutClient" fork="true">
+        <arg value="BLACK"/>
             <classpath>
                 <pathelement location="lib/gson-2.2.2.jar"/>
                 <pathelement location="build"/>
