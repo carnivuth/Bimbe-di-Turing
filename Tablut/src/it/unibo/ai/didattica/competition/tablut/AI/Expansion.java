@@ -204,7 +204,7 @@ public class Expansion {
         if(bottomSide+1<9){
             if(state.getPawn(x, bottomSide).equalsPawn(enemy)){
                 if(state.getPawn(x, bottomSide+1).equalsPawn(pawn) ||
-                 (state.getPawn(x, bottomSide+1).equalsPawn(Pawn.THRONE) || StateUtils.isIn(x, bottomSide+1, StateUtils.getCitadels()) )){
+                 (state.getPawn(x, bottomSide+1).equalsPawn(Pawn.THRONE) || StateUtils.isIn(x, bottomSide+1, StateUtils.cornerCitadels) )){
                     ///capture bottom
                     state.deletePawn(x, bottomSide,enemy );
                 }
@@ -215,7 +215,7 @@ public class Expansion {
         if(upSide-1>=0){
             if(state.getPawn(x, upSide).equalsPawn(enemy)){
                 if(state.getPawn(x, upSide-1).equalsPawn(pawn) || 
-                (state.getPawn(x, upSide-1).equalsPawn(Pawn.THRONE) || StateUtils.isIn(x, upSide-1, StateUtils.getCitadels()) )){
+                (state.getPawn(x, upSide-1).equalsPawn(Pawn.THRONE) || StateUtils.isIn(x, upSide-1, StateUtils.cornerCitadels) )){
                         //capture top
                         state.deletePawn(x, upSide,enemy );
                 }
@@ -227,7 +227,7 @@ public class Expansion {
         if(leftSide-1>=0){
             if(state.getPawn(leftSide, y).equalsPawn(enemy) ){
                 if(state.getPawn(leftSide-1, y).equalsPawn(pawn) ||
-                (state.getPawn(leftSide-1, y).equalsPawn(Pawn.THRONE) || StateUtils.isIn(leftSide-1, y, StateUtils.getCitadels()) )){
+                (state.getPawn(leftSide-1, y).equalsPawn(Pawn.THRONE) || StateUtils.isIn(leftSide-1, y, StateUtils.cornerCitadels) )){
                     //capture left
                     state.deletePawn(leftSide, y,enemy );
                 }
@@ -239,7 +239,7 @@ public class Expansion {
         if(rightSide+1<9){
             if(state.getPawn(rightSide, y).equalsPawn(enemy) ){
                 if(state.getPawn(rightSide+1, y).equalsPawn(pawn) ||
-                (state.getPawn(rightSide+1, y).equalsPawn(Pawn.THRONE) || StateUtils.isIn(rightSide+1, y, StateUtils.getCitadels()) )){
+                (state.getPawn(rightSide+1, y).equalsPawn(Pawn.THRONE) || StateUtils.isIn(rightSide+1, y, StateUtils.cornerCitadels) )){
                     //capture right
                     state.deletePawn(rightSide, y,enemy );
                 }
