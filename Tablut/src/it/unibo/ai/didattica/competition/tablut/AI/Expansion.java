@@ -67,7 +67,6 @@ public class Expansion {
             try {
                 result.add(new Action(StateUtils.createActionString(x, y),StateUtils.createActionString(x, newColumn),state.getTurn() ));
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
@@ -96,7 +95,6 @@ public class Expansion {
             try {
                 result.add(new Action(StateUtils.createActionString(x, y),StateUtils.createActionString(x, newColumn),state.getTurn() ));
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             newColumn+=1;
@@ -124,7 +122,6 @@ public class Expansion {
             try {
                 result.add(new Action(StateUtils.createActionString(x, y),StateUtils.createActionString(newRaw, y),state.getTurn() ));
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             
