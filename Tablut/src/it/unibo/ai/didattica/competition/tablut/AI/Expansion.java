@@ -29,13 +29,13 @@ public class Expansion {
                 for (int[] coordinates : state.getPawns(Pawn.WHITE)) {
                      System.out.println("x: " +coordinates[0]+"y: "+coordinates[1]);
 
-                    result.addAll(getPossibleMovements(state.getPawn(coordinates[0],coordinates[1] ),coordinates[0],coordinates[1], state,state.getTurn()));
+                    result.addAll(getPossibleMovements(Pawn.WHITE,coordinates[0],coordinates[1], state,state.getTurn()));
                 }
             
             }else{
               
                 for (int[] coordinates : state.getPawns(Pawn.BLACK)) {
-                    result.addAll(getPossibleMovements(state.getPawn(coordinates[0],coordinates[1] ),coordinates[0],coordinates[1], state,state.getTurn()));
+                    result.addAll(getPossibleMovements(Pawn.BLACK,coordinates[0],coordinates[1], state,state.getTurn()));
                 }
             }
         
