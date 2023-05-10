@@ -95,7 +95,7 @@ public class MyTablutClient extends TablutClient {
             TablutClient client = new MyTablutClient("WHITE", "Bimbe", 60, "localhost");
             client.run();
         } else if (role.equals("BLACK")) {
-            TablutClient client = new MyTablutClient("NERO", "Bimbe", 60, "localhost");
+            TablutClient client = new MyTablutClient("BLACK", "Bimbe", 60, "localhost");
             client.run();
         } else {
             System.out.println("Allowed roles are only WHITE and BLACK!");
