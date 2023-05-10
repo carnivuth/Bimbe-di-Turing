@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
+import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
 public class MockMain {
 
@@ -76,7 +77,7 @@ public class MockMain {
 
         // instanziate class
 
-        HeuristicBimbe h = new HeuristicBimbe();
+        HeuristicBimbe h = new HeuristicBimbe(Turn.WHITE);
 
         // get black pawns
         List<int[]> blackPawns = getPawns(board, "B");
