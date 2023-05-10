@@ -75,13 +75,18 @@ public class HeuristicBimbe implements Heuristic {
         // state.getTurn()) +
                 weight[PAWNS_WHITE] * whitePieces.size() +
                 //weight[VICTORY_PATH] * victoryPaths(king, blackPieces, whitePieces) +
-                // weight[VICTORY] * winCondition(state.getTurn()) +
+                weight[VICTORY] * winCondition(state.getTurn()) +
                 weight[PAWNS_BLACK] * blackPieces.size();
 
         return V * color;
     }
 
     /******************************************************/
+
+    private double winCondition(Turn turn) {
+        if(turn.equalsTurn("WW"))return 10;
+        else return 0;
+    }
 
     /********************** FUNC *************************/
     /**
