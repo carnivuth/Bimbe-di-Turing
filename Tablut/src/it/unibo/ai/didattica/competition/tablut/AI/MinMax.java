@@ -26,7 +26,7 @@ public class MinMax {
         this.currDepthLimit = currDepthLimit;
         this.player = player;
         this.enemy = (player.equalsTurn("W")) ? Turn.valueOf("BLACK") : Turn.valueOf("WHITE");
-        this.heuristic = new HeuristicBimbe();
+        this.heuristic = new HeuristicBimbe(this.player);
 
         possibleActions = new HashSet<>();
 

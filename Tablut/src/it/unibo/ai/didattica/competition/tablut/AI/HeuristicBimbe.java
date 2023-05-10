@@ -1,6 +1,7 @@
 package it.unibo.ai.didattica.competition.tablut.AI;
 
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
+import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
 import java.util.List;
 
@@ -23,14 +24,15 @@ public class HeuristicBimbe implements Heuristic {
 
     private int[][] escapes;
     private static int[] weight;
+    private int color;
 
     /**************** WIN ***********************/
 
 
 
-    public HeuristicBimbe() {
+    public HeuristicBimbe(Turn color) {
         this.escapes = StateUtils.getEscapes();
-
+        this.color = (color.equalsTurn("W") ||color.equalsTurn("WW")) ? 1 : -1;
         initWeights();
     }
 
@@ -44,7 +46,7 @@ public class HeuristicBimbe implements Heuristic {
         // double pawnsCoef = (initialBlack) / initialWhite; //(16.0/9.0)
 
         // POST GENETIC
-        weight[KING_MANHATTAN] = 42; // manhattan
+        weight[KING_MANHATTAN] = 300; // manhattan
         weight[KING_CAPTURED_SIDES] = -147; // king capture
         weight[PAWNS_DIFFERENCE] = -22; // lost pawns
         weight[PAWNS_WHITE] = 250; // white pieces (difference ?)
@@ -58,7 +60,7 @@ public class HeuristicBimbe implements Heuristic {
     public double evaluate(BimbeState state) {
 
         // get turn color
-        double color = ((state.getTurn().equalsTurn("W") || state.getTurn().equalsTurn("WW")) ? 1 : -1);
+        
 
         // pawns
         // Pawn[][] pieces = state.getBoard();
@@ -72,7 +74,7 @@ public class HeuristicBimbe implements Heuristic {
         // weight[PAWNS_DIFFERENCE] * lostPaws(blackPieces, whitePieces,
         // state.getTurn()) +
                 weight[PAWNS_WHITE] * whitePieces.size() +
-                weight[VICTORY_PATH] * victoryPaths(king, blackPieces, whitePieces) +
+                //weight[VICTORY_PATH] * victoryPaths(king, blackPieces, whitePieces) +
                 // weight[VICTORY] * winCondition(state.getTurn()) +
                 weight[PAWNS_BLACK] * blackPieces.size();
 
