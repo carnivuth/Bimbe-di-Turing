@@ -13,7 +13,7 @@ import java.util.List;
 
 public class HeuristicBimbe implements Heuristic {
 
-    /*** cost ***/
+    /*** WEIGHTS ***/
     public static final int KING_MANHATTAN = 0;
     public static final int KING_CAPTURED_SIDES = 1;
     public static final int PAWNS_DIFFERENCE = 2;
@@ -26,7 +26,6 @@ public class HeuristicBimbe implements Heuristic {
     private static int[] weight;
     private int color;
 
-    /**************** WIN ***********************/
 
     public HeuristicBimbe(Turn color) {
         this.escapes = StateUtils.getEscapes();
@@ -40,42 +39,40 @@ public class HeuristicBimbe implements Heuristic {
 
     private void initWeights() {
         weight = new int[7];
-
-        // double pawnsCoef = (initialBlack) / initialWhite; //(16.0/9.0)
-
-        // POST GENETIC
-        weight[KING_MANHATTAN] = 42; // manhattan
-        weight[KING_CAPTURED_SIDES] = -147; // king capture
-        weight[PAWNS_DIFFERENCE] = -22; // lost pawns
-        weight[PAWNS_WHITE] = 250; // white pieces (difference ?)
-        weight[VICTORY_PATH] = 195; // victory path
-        weight[VICTORY] = 5000; // victory
-        weight[PAWNS_BLACK] = -164; // black pieces
+        weight[KING_MANHATTAN] = 42;
+        weight[KING_CAPTURED_SIDES] = -147;
+        weight[PAWNS_DIFFERENCE] = -22; 
+        weight[PAWNS_WHITE] = 250; 
+        weight[VICTORY_PATH] = 195; 
+        weight[VICTORY] = 5000; 
+        weight[PAWNS_BLACK] = -164; 
     }
-
-    /********************* eval ********************************/
+    
+    /**
+     * evaluation function based on manhattan distance, number of white pawns and number of black pawns
+     */
     @Override
     public double evaluate(BimbeState state) {
 
         List<int[]> blackPieces = state.getPawns(Pawn.BLACK);
         List<int[]> whitePieces = state.getPawns(Pawn.WHITE);
         int[] king = state.getKing();
+        double v;
+        if(winCondition(state.getTurn())!=0){
+            return color*weight[VICTORY] * winCondition(state.getTurn()) ;
+        }else{
+            v= weight[KING_MANHATTAN] * kingManhattan(king) +
+            weight[PAWNS_WHITE] * whitePieces.size() +
+            //weight[VICTORY_PATH] * victoryPaths(king, blackPieces, whitePieces) +
+            
+            weight[PAWNS_BLACK] * blackPieces.size();
+        }
+       return color*v;
 
-        double V = weight[KING_MANHATTAN] * kingManhattan(king) +
-                weight[PAWNS_WHITE] * whitePieces.size() +
-                weight[VICTORY_PATH] * victoryPaths(king, blackPieces, whitePieces) +
-                weight[VICTORY] * winCondition(state.getTurn()) +
-                weight[PAWNS_BLACK] * blackPieces.size();
-        // weight[KING_CAPTURED_SIDES] * kingCapture(king, state) +
-        // weight[PAWNS_DIFFERENCE] * lostPaws(blackPieces, whitePieces,
-        // state.getTurn()) +
 
-        return V * color;
     }
 
-    /******************************************************/
 
-    /********************** FUNC *************************/
     /**
      * WEIGHT 0
      * finds the minimum distance between the king object and the objects in the
@@ -92,60 +89,9 @@ public class HeuristicBimbe implements Heuristic {
         }
         return 6 - minDistance;
     }
-
+    
     /**
-     * WEIGHT 1
-     * finds the number of black pieces or walls that are close to the king
-     **/
-    public double kingCapture(int[] king, BimbeState state) {
-        double count = 0;
-        int x = king[0];
-        int y = king[1] + 1;
-
-        if (state.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x == 4 && y == 4)) {
-            count++;
-        }
-        x = king[0];
-        y = king[1] - 1;
-        if (state.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x == 4 && y == 4)) {
-            count++;
-        }
-        x = king[0] + 1;
-        y = king[1];
-        if (state.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x == 4 && y == 4)) {
-            count++;
-        }
-        x = king[0] - 1;
-        y = king[1];
-        if (state.isBlackPiece(x, y) || StateUtils.isIn(x, y, StateUtils.citadels) || (x == 4 && y == 4)) {
-            count++;
-        }
-
-        // System.out.println("king capture - castls + blacks + citadels: " + count);
-
-        return count;
-    }
-
-    /**
-     * WEIGHT 2
-     * finds the difference between the initial number of pawns and the current
-     * number of pawns
-     **/
-    /*
-     * private double lostPaws(List<int[]> black, List<int[]> white, State.Turn
-     * turn) {
-     * // double coeff = 16/9; //per equilibrare la situazione di pezzi
-     * // return - (coeff)*(initialWhite - white.size()) + (initialBlack -
-     * // black.size());
-     * return 0;
-     * }
-     */
-
-    /** WEIGHT 3 **/
-    // pezzi bianchi
-
-    /**
-     * WEIGHT 4
+     * WEIGHT 3
      * finds the number of open paths to victory for the king (king between two escapes)
      **/
     public int victoryPaths(int[] king, List<int[]> blackPieces, List<int[]> whitePieces) {
@@ -186,8 +132,8 @@ public class HeuristicBimbe implements Heuristic {
 
     }
 
-    /*** WEIGHT 5 
-     * when the king is in an escape room, the board is white winning
+    /*** WEIGHT 4
+     * check if we are on a terminal state
      * ***/
     private double winCondition(Turn turn) {
         if (turn.equalsTurn("WW"))
@@ -197,29 +143,5 @@ public class HeuristicBimbe implements Heuristic {
             return 0;
     }
 
-    // // bonus su distanza da root
-    // private double depthBonus(int depth) {
-    // // return depth == 0 ? 2 : 1;
-    // return (double) (depthLimit - depth) / (double) depthLimit + 1.0;
-    // }
-
-    /** WEIGHT 6 **/
-    // pezzi neri
-
-    public static void printBoard(Pawn[][] board) {
-        for (Pawn[] row : board) {
-            for (Pawn p : row) {
-                System.out.print(p.toString());
-            }
-            System.out.println();
-        }
-    }
-
-    public static void printBoard(int[][] board) {
-        for (int[] b : board) {
-            System.out.println("(" + b[0] + ", " + b[1] + ")");
-        }
-
-    }
 
 }
