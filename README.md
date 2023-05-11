@@ -1,21 +1,10 @@
-# TablutCompetition
-Software for the Tablut Students Competition
+# Bimbe di Turing
+player for tablut client competition 
 
-## Installation on Ubuntu/Debian 
+## Features 
+ - Heuristic based on Manhattan distance and number of pawns on the board
 
-From console, run these commands to install JDK 8 e ANT:
 
-```
-sudo apt update
-sudo apt install openjdk-8-jdk -y
-sudo apt install ant -y
-```
-
-Now, clone the project repository:
-
-```
-git clone https://github.com/AGalassi/TablutCompetition.git
-```
 
 ## Run the Server without Eclipse
 
@@ -31,34 +20,25 @@ Compile the project:
 ant clean
 ant compile
 ```
-
-The compiled project is in  the `build` folder.
-Run the server with:
-
+Run 
 ```
 ant server
+ant bimbewhite
+ant bimbeblack
 ```
-
-Check the behaviour using the random players in two different console windows:
-
-```
-ant randomwhite
-
-ant randomblack
-```
-
-At this point, a window with the game state should appear.
-
-To be able to run other classes, change the `build.xml` file and re-compile everything
-
-
-## Replay function
-
-Replay a game using the logfile
-
-Example:
+to create executable jar run 
 
 ```
-java -jar .\server.jar -g -R .\logs\PLAYER1_vs_PLAYER2_1652711382324_gameLog.txt
+ant bimbe-jar
+```
+ to run jar
+
+```
+java -jar bimbe.jar COLOR SERVER-ADDRESS TIMEOUT
 ```
 
+### Authors 
+ - [Longhi Matteo](https://github.com/carnivuth)
+ - [Stefano Hu](https://github.com/hjcSteve)
+ - [Caterina Leonelli](https://github.com/RootLeo00)
+ - [Anna Vandi](https://github.com/AnnaVandi)
