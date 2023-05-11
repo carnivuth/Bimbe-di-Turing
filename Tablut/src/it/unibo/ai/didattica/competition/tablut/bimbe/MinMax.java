@@ -21,18 +21,19 @@ public class MinMax {
     private Turn player;
     private Turn enemy;
     private final Heuristic heuristic;
+    private int timeout;
 
     // risultati
     private static Set<Action> possibleActions;
 
     private Expansion myExpansion = new Expansion();
 
-    public MinMax(int currDepthLimit, State.Turn player) {
+    public MinMax(int currDepthLimit, State.Turn player,int timeout) {
         this.currDepthLimit = currDepthLimit;
         this.player = player;
         this.enemy = (player.equalsTurn("W")) ? Turn.valueOf("BLACK") : Turn.valueOf("WHITE");
         this.heuristic = new HeuristicBimbe(this.player);
-
+        this.timeout=timeout;
         possibleActions = new HashSet<>();
 
     }
@@ -69,7 +70,7 @@ public class MinMax {
                 resultAction = a;
             }
             endTime = System.currentTimeMillis();
-            if ((endTime - startTime) / 1000 > 55) {
+            if ((endTime - startTime) / 1000 > this.timeout-5) {
                 System.out.println("TIMEOUT------------------------");
                 break;
             }

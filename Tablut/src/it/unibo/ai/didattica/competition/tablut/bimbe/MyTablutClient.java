@@ -21,28 +21,37 @@ public class MyTablutClient extends TablutClient {
     // - il nome del giocatore
     // - il timeout
     // - l'indirizzo IP del server
+    private int minMaxTimeout;
 
     public MyTablutClient(String player, String name, int timeout, String ipAddress)
             throws UnknownHostException, IOException {
         super(player, name, timeout, ipAddress);
+        minMaxTimeout=timeout;
     }
 
     public MyTablutClient(String player, String name, int timeout) throws UnknownHostException, IOException {
         super(player, name, timeout);
+        minMaxTimeout=timeout;
+
     }
 
     public MyTablutClient(String player, String name) throws UnknownHostException, IOException {
         super(player, name);
+        minMaxTimeout=60;
+
     }
 
     public MyTablutClient(String player, String name, String ipAddress) throws UnknownHostException, IOException {
         super(player, name, ipAddress);
+        minMaxTimeout=60;
+
+
     }
 
     // Qui ci sono i metodi astratti di TablutClient
     @Override
     public void run() {
-        MinMax minmax = new MinMax(3, this.getPlayer());
+        MinMax minmax = new MinMax(5, this.getPlayer(),this.minMaxTimeout);
         try {
             this.declareName();
         } catch (Exception e) {
@@ -98,6 +107,7 @@ public class MyTablutClient extends TablutClient {
          role = args[0];
          serverAddress = args[1];
          timeout = args[2];
+         System.out.println(role+" "+serverAddress+" "+timeout);
         
 
         }
