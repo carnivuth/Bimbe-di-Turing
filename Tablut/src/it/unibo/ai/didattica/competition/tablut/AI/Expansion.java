@@ -10,6 +10,12 @@ import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
+/**
+ *
+ * @author RootLeo00, carnivuth, hjsteve
+ *
+ */
+
 
 public class Expansion {
 

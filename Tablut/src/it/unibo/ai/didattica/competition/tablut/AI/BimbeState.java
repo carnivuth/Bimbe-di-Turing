@@ -6,6 +6,12 @@ import java.util.List;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 
+/**
+ *
+ * @author RootLeo00, carnivuth, hjsteve
+ *
+ */
+
 public class BimbeState extends StateTablut{
     private List<int []> blackPawns;
     private List<int []> whitePawns;

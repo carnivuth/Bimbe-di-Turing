@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.unibo.ai.didattica.competition.tablut.domain.State;
+/**
+ *
+ * @author RootLeo00, carnivuth, hjsteve
+ *
+ */
 
 public class StateUtils {
 

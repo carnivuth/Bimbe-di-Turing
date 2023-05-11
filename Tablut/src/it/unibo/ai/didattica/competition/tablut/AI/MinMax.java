@@ -9,6 +9,11 @@ import java.util.Set;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
+/**
+ *
+ * @author RootLeo00, carnivuth, hjsteve
+ *
+ */
 
 public class MinMax {
 
