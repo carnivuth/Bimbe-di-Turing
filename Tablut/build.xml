@@ -71,7 +71,7 @@
         </java>
     </target>
         <target name="bimbewhite">
-        <java classname="it.unibo.ai.didattica.competition.tablut.AI.MyTablutClient" fork="true">
+        <java classname="it.unibo.ai.didattica.competition.tablut.bimbe.MyTablutClient" fork="true">
         <arg value="WHITE"/>
             <classpath>
                 <pathelement location="lib/gson-2.2.2.jar"/>
@@ -80,7 +80,7 @@
         </java>
     </target>
         <target name="bimbeblack">
-        <java classname="it.unibo.ai.didattica.competition.tablut.AI.MyTablutClient" fork="true">
+        <java classname="it.unibo.ai.didattica.competition.tablut.bimbe.MyTablutClient" fork="true">
         <arg value="BLACK"/>
             <classpath>
                 <pathelement location="lib/gson-2.2.2.jar"/>
@@ -93,6 +93,17 @@
         <jar destfile="random.jar" filesetmanifest="mergewithoutmain">
             <manifest>
                 <attribute name="Main-Class" value="it.unibo.ai.didattica.competition.tablut.client.TablutRandomClient"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="build"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/gson-2.2.2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="lib/commons-cli-1.4.jar"/>
+        </jar>
+    </target>
+    <target name="bimbe-jar">
+        <jar destfile="bimbe.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="it.unibo.ai.didattica.competition.tablut.bimbe.MyTablutClient"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="build"/>

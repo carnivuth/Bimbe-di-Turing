@@ -1,4 +1,4 @@
-package it.unibo.ai.didattica.competition.tablut.AI;
+package it.unibo.ai.didattica.competition.tablut.bimbe;
 
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
@@ -47,7 +47,7 @@ public class HeuristicBimbe implements Heuristic {
         weight[VICTORY] = 5000; 
         weight[PAWNS_BLACK] = -164; 
     }
-    
+
     /**
      * evaluation function based on manhattan distance, number of white pawns and number of black pawns
      */

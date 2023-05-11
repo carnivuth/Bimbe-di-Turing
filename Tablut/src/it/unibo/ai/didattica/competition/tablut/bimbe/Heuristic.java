@@ -1,4 +1,4 @@
-package it.unibo.ai.didattica.competition.tablut.AI;
+package it.unibo.ai.didattica.competition.tablut.bimbe;
 
 /**
  *
