@@ -88,18 +88,24 @@ public class MyTablutClient extends TablutClient {
     // il main
     public static void main(String[] args) throws UnknownHostException, ClassNotFoundException, IOException {
         String role="";
-        if (args.length == 0) {
-           System.out.println("You must specify which player you are (WHITE or BLACK)!");
+        String serverAddress="";
+        String timeout="";
+        if (args.length != 3) {
+           System.out.println("wrong parameters, parameters are COLOR SERVER-ADDRESS TIMEOUT !");
+
            System.exit(-1);
         }else{
          role = args[0];
+         serverAddress = args[1];
+         timeout = args[2];
+        
 
         }
         if (role.equals("WHITE")) {
-            TablutClient client = new MyTablutClient("WHITE", "Bimbe", 60, "localhost");
+            TablutClient client = new MyTablutClient("WHITE", "Bimbe", Integer.parseInt(timeout), serverAddress);
             client.run();
         } else if (role.equals("BLACK")) {
-            TablutClient client = new MyTablutClient("BLACK", "Bimbe", 60, "localhost");
+            TablutClient client = new MyTablutClient("BLACK", "Bimbe", Integer.parseInt(timeout), serverAddress);
             client.run();
         } else {
             System.out.println("Allowed roles are only WHITE and BLACK!");
