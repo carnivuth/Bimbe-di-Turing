@@ -77,7 +77,7 @@ public class MockMain {
 
         // instanziate class
 
-        HeuristicBimbe h = new HeuristicBimbe(Turn.WHITE);
+        HeuristicBimbe h = new HeuristicBimbe(Turn.WHITE,0);
 
         // get black pawns
         List<int[]> blackPawns = getPawns(board, "B");
