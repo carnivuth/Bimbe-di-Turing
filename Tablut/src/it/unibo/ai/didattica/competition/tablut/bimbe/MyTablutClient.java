@@ -22,11 +22,13 @@ public class MyTablutClient extends TablutClient {
     // - il timeout
     // - l'indirizzo IP del server
     private int minMaxTimeout;
+    private int depthLimit;
 
-    public MyTablutClient(String player, String name, int timeout, String ipAddress)
+    public MyTablutClient(String player, String name, int timeout, String ipAddress,int depthLimit)
             throws UnknownHostException, IOException {
         super(player, name, timeout, ipAddress);
         minMaxTimeout=timeout;
+        this.depthLimit=depthLimit;
     }
 
     public MyTablutClient(String player, String name, int timeout) throws UnknownHostException, IOException {
@@ -51,7 +53,7 @@ public class MyTablutClient extends TablutClient {
     // Qui ci sono i metodi astratti di TablutClient
     @Override
     public void run() {
-        MinMax minmax = new MinMax(5, this.getPlayer(),this.minMaxTimeout);
+        MinMax minmax = new MinMax(this.depthLimit, this.getPlayer(),this.minMaxTimeout);
         try {
             this.declareName();
         } catch (Exception e) {
@@ -99,7 +101,8 @@ public class MyTablutClient extends TablutClient {
         String role="";
         String serverAddress="";
         String timeout="";
-        if (args.length != 3) {
+        String depthLimit="";
+        if (args.length != 4) {
            System.out.println("wrong parameters, parameters are COLOR SERVER-ADDRESS TIMEOUT !");
 
            System.exit(-1);
@@ -107,15 +110,15 @@ public class MyTablutClient extends TablutClient {
          role = args[0];
          serverAddress = args[1];
          timeout = args[2];
-         System.out.println(role+" "+serverAddress+" "+timeout);
+         depthLimit = args[3];
         
 
         }
         if (role.equals("WHITE")) {
-            TablutClient client = new MyTablutClient("WHITE", "Bimbe", Integer.parseInt(timeout), serverAddress);
+            TablutClient client = new MyTablutClient("WHITE", "Bimbe", Integer.parseInt(timeout), serverAddress,Integer.parseInt(depthLimit));
             client.run();
         } else if (role.equals("BLACK")) {
-            TablutClient client = new MyTablutClient("BLACK", "Bimbe", Integer.parseInt(timeout), serverAddress);
+            TablutClient client = new MyTablutClient("BLACK", "Bimbe", Integer.parseInt(timeout), serverAddress,Integer.parseInt(depthLimit));
             client.run();
         } else {
             System.out.println("Allowed roles are only WHITE and BLACK!");

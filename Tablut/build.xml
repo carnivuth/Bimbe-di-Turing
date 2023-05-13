@@ -75,6 +75,7 @@
         <arg value="WHITE"/>
         <arg value="localhost"/>
         <arg value="60"/>
+        <arg value="3"/>
             <classpath>
                 <pathelement location="lib/gson-2.2.2.jar"/>
                 <pathelement location="build"/>
@@ -86,6 +87,7 @@
         <arg value="BLACK"/>
         <arg value="localhost"/>
         <arg value="60"/>
+        <arg value="3"/>
             <classpath>
                 <pathelement location="lib/gson-2.2.2.jar"/>
                 <pathelement location="build"/>
