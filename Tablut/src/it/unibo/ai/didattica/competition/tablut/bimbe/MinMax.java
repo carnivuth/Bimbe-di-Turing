@@ -19,7 +19,6 @@ public class MinMax {
 
     private int currDepthLimit;
     private Turn player;
-    private Turn enemy;
     private final Heuristic heuristic;
     private int timeout;
 
@@ -31,8 +30,7 @@ public class MinMax {
     public MinMax(int currDepthLimit, State.Turn player,int timeout) {
         this.currDepthLimit = currDepthLimit;
         this.player = player;
-        this.enemy = (player.equalsTurn("W")) ? Turn.valueOf("BLACK") : Turn.valueOf("WHITE");
-        this.heuristic = new HeuristicBimbe(this.player);
+        this.heuristic = new HeuristicBimbe(this.player,currDepthLimit);
         this.timeout=timeout;
         possibleActions = new HashSet<>();
 
@@ -95,11 +93,9 @@ public class MinMax {
 
     private double maxValue(BimbeState state, double alpha, double beta, int depth) {
 
-        List<int[]> blackPawns = StateUtils.getPawns(state, "B");
-        List<int[]> whitePawns = StateUtils.getPawns(state, "W");
         if (isTerminal(state) || depth == currDepthLimit) {
             System.out.println("Min TERMINAL");
-            return evaluate(state, player, blackPawns.size(), whitePawns.size());
+            return evaluate(state,depth);
         }
 
         double value = Double.NEGATIVE_INFINITY;
@@ -121,11 +117,9 @@ public class MinMax {
 
     private double minValue(BimbeState state, double alpha, double beta, int depth) {
 
-        List<int[]> blackPawns = StateUtils.getPawns(state, "B");
-        List<int[]> whitePawns = StateUtils.getPawns(state, "W");
 
         if (isTerminal(state) || depth == currDepthLimit) {
-            return evaluate(state, enemy, blackPawns.size(), whitePawns.size());
+            return evaluate(state,depth);
         }
         System.out.println("MIN VALUE " + depth + "alpha: " + alpha + " beta: " + beta);
         double value = Double.POSITIVE_INFINITY;
@@ -148,9 +142,9 @@ public class MinMax {
                 || state.getTurn().equals(Turn.DRAW);
     }
 
-    private double evaluate(BimbeState state, Turn color, int blackPawns, int whitePawns) {
+    private double evaluate(BimbeState state,int depth) {
 
-        return heuristic.evaluate(state);
+        return heuristic.evaluate(state,depth);
     }
 
 }

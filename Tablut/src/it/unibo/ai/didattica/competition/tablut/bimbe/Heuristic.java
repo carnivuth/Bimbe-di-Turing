@@ -7,5 +7,5 @@ package it.unibo.ai.didattica.competition.tablut.bimbe;
  */
 
 public interface Heuristic {
-    double evaluate(BimbeState state );
+    double evaluate(BimbeState state , int depth);
 }

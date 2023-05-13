@@ -25,12 +25,14 @@ public class HeuristicBimbe implements Heuristic {
     private int[][] escapes;
     private static int[] weight;
     private int color;
+    private int depthlimit;
 
 
-    public HeuristicBimbe(Turn color) {
+    public HeuristicBimbe(Turn color, int depthlimit) {
         this.escapes = StateUtils.getEscapes();
         this.color = (color.equalsTurn("W") || color.equalsTurn("WW")) ? 1 : -1;
         initWeights();
+        this.depthlimit=depthlimit+1;
     }
 
     public static void setWeight(int[] weight) {
@@ -52,14 +54,14 @@ public class HeuristicBimbe implements Heuristic {
      * evaluation function based on manhattan distance, number of white pawns and number of black pawns
      */
     @Override
-    public double evaluate(BimbeState state) {
+    public double evaluate(BimbeState state,int depth) {
 
         List<int[]> blackPieces = state.getPawns(Pawn.BLACK);
         List<int[]> whitePieces = state.getPawns(Pawn.WHITE);
         int[] king = state.getKing();
         double v;
         if(winCondition(state.getTurn())!=0){
-            return color*weight[VICTORY] * winCondition(state.getTurn()) ;
+            return color*weight[VICTORY] *(depthlimit-depth)* winCondition(state.getTurn()) ;
         }else{
             v= weight[KING_MANHATTAN] * kingManhattan(king) +
             weight[PAWNS_WHITE] * whitePieces.size() +
