@@ -103,7 +103,7 @@ public class MyTablutClient extends TablutClient {
         String timeout="";
         String depthLimit="";
         if (args.length != 4) {
-           System.out.println("wrong parameters, parameters are COLOR SERVER-ADDRESS TIMEOUT !");
+           System.out.println("wrong parameters, parameters are COLOR SERVER-ADDRESS TIMEOUT DEPTHLIMIT !");
 
            System.exit(-1);
         }else{
