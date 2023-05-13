@@ -139,7 +139,8 @@ public class BimbeState extends StateTablut{
             count++;
         }
         if (count==4)return 1;
-        
+        //check if king is in castle
+        if(king[0]==4 && king[1]==4)return 0;
         //check for normal captures
         if(king[0]-1<9 &&king[0]+1<9 && this.isBlackPiece(king[0]-1, king[1]) && this.isBlackPiece(king[0]+1, king[1])) return 1;
         if(king[1]-1<9 &&king[1]+1<9 && this.isBlackPiece(king[0], king[1]-1) && this.isBlackPiece(king[0], king[1]+1)) return 1;
