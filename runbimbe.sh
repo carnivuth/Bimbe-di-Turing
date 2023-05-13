@@ -1,0 +1,1 @@
+java -jar bimbe.jar "$1" "$3" "$2"
