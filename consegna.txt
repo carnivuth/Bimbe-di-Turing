@@ -1,0 +1,7 @@
+-1) link macchina virtuale
+
+-2) per lanciare bimbe
+ ./runbimbe (BLACK|WHITE) TIMEOUT SERVERADDRESS [MAXDEPTHLIMIT] 
+ lanciare senza specificare max depth limit perche gia presente un valore di default
+link repository github
+https://github.com/carnivuth/Bimbe-di-Turing
